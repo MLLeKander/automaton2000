@@ -4,7 +4,7 @@ import bot
 
 server = 'irc.freenode.net'
 port = 6667
-nick = 'OMGAutomaton2000'
+nick = 'Automaton2000'
 channels = ['#disregardplease']
 trigger = '!'
 

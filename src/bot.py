@@ -33,7 +33,7 @@ class IRCBot(threading.Thread):
       re = self.re_trig if usetrigger else re_notrig
       match = re.match(line)
       if not match:
-         return [None, None, None, None, None]
+         return [None]*5
       return [match.group(key) for key in ['nick','user','host','chan','msg']]
    
    
@@ -51,12 +51,16 @@ class IRCBot(threading.Thread):
       for channel in self.channels:
          self.send('JOIN {0}'.format(channel))
       
-      for line in self._con.makefile():
+      ircfile = self._con.makefile()
+
+      for line in ircfile:
          line = line.rstrip('\r\n')
+#TODO: Proper logging
          print(self.server+" > "+line)
          match = self.match_privmsg(line)
          for module in self.modules:
             if module.handle(line, self, match):
                break;
-
-
+      
+      ircfile.close()
+      self._con.close()
