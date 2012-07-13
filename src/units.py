@@ -93,15 +93,15 @@ units = [
       attrs='glb', 
       hp=100, shields=50,
       attacks=[
-         Attack('Psi Blades', 8, 1.2, 'g', volleys=2),
+         Attack('Psi Blade', 8, 1.2, 'g', volleys=2),
       ]
    ), Unit(
       names=['stalker'],
       attrs='gam',
       hp=100, shields=50,
       attacks=[
-         Attack('Particle Disruptors (v. armored)', 14, 1.44, 'gfa'),
-         Attack('Particle Disruptors', 10, 1.44, 'gf'),
+         Attack('Particle Disruptor (v. armored)', 14, 1.44, 'gfa'),
+         Attack('Particle Disruptor', 10, 1.44, 'gf'),
       ]
    ), Unit(
       names=['sentry'],
@@ -116,8 +116,8 @@ units = [
       attrs='gam',
       hp=200, shields=100,
       attacks=[
-         Attack('Phase Disruptors (v. armored)', 50, 1.45, 'ga', per_up=3),
-         Attack('Phase Disruptors', 20, 1.45, 'g', per_up=2),
+         Attack('Phase Disruptor (v. armored)', 50, 1.45, 'ga', per_up=3),
+         Attack('Phase Disruptor', 20, 1.45, 'g', per_up=2),
       ]
    ), Unit(
       names=['colossus','colossi'],
@@ -125,7 +125,7 @@ units = [
       hp=200, shields=150,
       armor=1,
       attacks=[
-         Attack('Thermal Lances', 15, 1.65, 'g', per_up=2, volleys=2, splash=True),
+         Attack('Thermal Lance', 15, 1.65, 'g', per_up=2, volleys=2, splash=True),
       ]
    ), Unit(
       names=['warpprism','wp'],
@@ -168,8 +168,8 @@ units = [
       hp=120, shields=60,
       attacks=[
 #TODO: Can't attack massive... but not a big deal.
-         Attack('Ion Cannons (v. light)', 10, 1.11, 'gfb', volleys=2),
-         Attack('Ion Cannons', 5, 1.11, 'gf', volleys=2),
+         Attack('Ion Cannon (v. light)', 10, 1.11, 'gfb', volleys=2),
+         Attack('Ion Cannon', 5, 1.11, 'gf', volleys=2),
       ]
    ), Unit(
       names=['voidray','vr'],
@@ -194,7 +194,7 @@ units = [
       attrs='flm',
       hp=40, shields=40,
       attacks=[
-         Attack('Interceptor Beams', 5, 3, 'gf', volleys=2),
+         Attack('Interceptor Beam', 5, 3, 'gf', volleys=2),
       ]
    ), Unit(
       names=['mothership','mommaship'],
@@ -202,7 +202,7 @@ units = [
       hp=350, shields=350,
       armor=2,
       attacks=[
-         Attack('Purifier Beams', 6, 2.21, 'gf', volleys=6),
+         Attack('Purifier Beam', 6, 2.21, 'gf', volleys=6),
       ]
    ), Unit(
       names=['tempest'],
@@ -245,28 +245,28 @@ units = [
       attrs='glb',
       hp=40,
       attacks=[
-         Attack('Claws', 5, 1.5, 'g'),
+         Attack('Claw', 5, 1.5, 'g'),
       ]
    ), Unit(
       names=['zergling','ling'],
       attrs='glb',
       hp=35,
       attacks=[
-         Attack('Claws', 5, 0.696, 'g'),
+         Attack('Claw', 5, 0.696, 'g'),
       ]
    ), Unit(
       names=['crackling'],
       attrs='glb',
       hp=35,
       attacks=[
-         Attack('Claws', 5, 0.587, 'g'),
+         Attack('Claw', 5, 0.587, 'g'),
       ]
    ), Unit(
       names=['baneling','bling'],
       attrs='gb',
       hp=30,
       attacks=[
-         Attack('Attack Buildings', 80, 0.833, 'g', per_up=5, splash=True),
+         Attack('Attack Building', 80, 0.833, 'g', per_up=5, splash=True),
          Attack('Volatile Burst (v. light)', 35, 0.833, 'g', per_up=4,splash=True),
          Attack('Volatile Burst', 20, 0.833, 'g', per_up=2, splash=True),
       ]
@@ -278,7 +278,7 @@ units = [
       attacks=[
 #TODO: Maybe just cut cooldown in half and make 1 volley?
          Attack('Claws', 4, 1, 'g', volleys=2),
-         Attack('Acid Spines', 9, 1, 'f'),
+         Attack('Acid Spine', 9, 1, 'f'),
       ]
    ), Unit(
       names=['roach'],
@@ -293,7 +293,7 @@ units = [
       attrs='glb',
       hp=80,
       attacks=[
-         Attack('Needle Spines', 12, 0.83, 'gf'),
+         Attack('Needle Spine', 12, 0.83, 'gf'),
       ]
    ), Unit(
       names=['infestor'],
@@ -322,8 +322,8 @@ units = [
       attrs='fab',
       hp=200,
       attacks=[
-         Attack('Parasite Spores (v. massive)', 20, 1.9, 'gv', per_up=2),
-         Attack('Parasite Spores', 14, 1.9, 'g'),
+         Attack('Parasite Spore (v. massive)', 20, 1.9, 'fv', per_up=2),
+         Attack('Parasite Spore', 14, 1.9, 'f'),
       ]
    ), Unit(
       names=['mutalisk','muta'],
@@ -351,8 +351,8 @@ units = [
       attrs='gabv',
       hp=500,
       attacks=[
-         Attack('Kaiser Blades (v. armored)', 20, 0.861, 'ga', per_up=2, splash=True),
-         Attack('Kaiser Blades', 15, 0.861, 'g', per_up=2, splash=True),
+         Attack('Kaiser Blade (v. armored)', 20, 0.861, 'ga', per_up=2, splash=True),
+         Attack('Kaiser Blade', 15, 0.861, 'g', per_up=2, splash=True),
       ]
    ), Unit(
       names=['spinecrawler','spine'],
@@ -371,7 +371,7 @@ units = [
       armor=1,
       per_up=0,
       attacks=[
-         Attack('Seeker Spores', 15, 0.8608, 'f'),
+         Attack('Seeker Spore', 15, 0.8608, 'f'),
       ]
    ), Unit(
       names=['overlord','ol'],
