@@ -5,7 +5,7 @@ import bot
 server = 'irc.freenode.net'
 port = 6667
 nick = 'Automaton2000'
-channels = ['#disregardplease']
+channels = ['##starcraft']
 trigger = '!'
 
 #TODO: Automatically generate this from modules/__init__.py ?
@@ -13,6 +13,7 @@ modules = [
              pingModule,
              statsModule,
              ohaiModule,
+             htkModule,
           ]
 
 #TODO: Currently requires Ctrl+\ to kill

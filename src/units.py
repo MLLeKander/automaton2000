@@ -32,7 +32,6 @@ class Attack:
    def target(self, opponent, atk_up, armor_up, shield_up=0):
       for i in range(self.volleys):
          opponent.take_hit(atk_up * self.per_up + self.dmg, armor_up, shield_up)
-         print atk_up * self.per_up + self.dmg, opponent.hp
 
 class Unit:
    def __init__(self, names, attrs, hp, attacks, shields=0, armor=0, per_up=1):
