@@ -34,7 +34,8 @@ class Attack:
          opponent.take_hit(atk_up * self.per_up + self.dmg, armor_up, shield_up)
 
 class Unit:
-   def __init__(self, names, attrs, hp, attacks, shields=0, armor=0, per_up=1):
+   def __init__(self, names, attrs, hp, mins=0, gas=0, attacks=[], shields=0, \
+                armor=0, per_up=1):
       self.names = names
       self.name = names[0]
       self.attacks = attacks
@@ -82,8 +83,17 @@ units = [
    # Protoss Units
 
    Unit(
+      names=['zeratul'],
+      attrs='glbp',
+      hp=300, shields=100,
+      attacks=[
+         Attack('Warp Blade (v. armored)', 110, 1.2, 'ga'),
+         Attack('Warp Blade', 85, 1.2, 'g'),
+      ]
+   ), Unit(
       names=['probe'],
       attrs='glm',
+      mins=50,
       hp=20, shields=20,
       attacks=[
          Attack('Particle Beam', 5, 1.5, 'g'),
@@ -187,8 +197,6 @@ units = [
       attrs='famv',
       hp=300, shields=250,
       armor=2,
-      attacks=[
-      ]
    ), Unit(
       names=['interceptor'],
       attrs='flm',
@@ -216,8 +224,6 @@ units = [
       names=['oracle'],
       attrs='flm',
       hp=80, shields=20,
-      attacks=[
-      ]
    ), Unit(
       names=['cannon'],
       attrs='gams',
@@ -225,8 +231,7 @@ units = [
       armor=1,
       per_up=0,
       attacks=[
-         Attack('Psionic Shockwave (v. biological)', 35, 1.754, 'gfb', per_up=1, splash=True),
-         Attack('Psionic Shockwave', 25, 1.754, 'gf', per_up=3, splash=True),
+         Attack('Phase Disruptor', 20, 1.25, 'gf', per_up=1),
       ]
    ),
    
@@ -238,8 +243,6 @@ units = [
       hp=25,
       armor=10,
       per_up=0,
-      attacks=[
-      ]
    ), Unit(
       names=['drone'],
       attrs='glb',
@@ -300,11 +303,12 @@ units = [
       attrs='gabp',
       hp=90,
       attacks=[
+#TODO: Currently takes armor into account, but shouldn't.
          Attack('Fungal Growth (v. armored)', 40, 4, 'gfa', per_up=0),
          Attack('Fungal Growth', 30, 4, 'gf', per_up=0),
       ]
    ), Unit(
-      names=['infestedterran','infested','it'],
+      names=['infestedterran','infested','infested-terran'],
       attrs='glb',
       hp=50,
       attacks=[
@@ -333,7 +337,7 @@ units = [
          Attack('Glaive Wurm', 9, 1.5246, 'gf'),
       ]
    ), Unit(
-      names=['broodlord','brood','bl'],
+      names=['broodlord','brood','bl','brood-lord'],
       attrs='fabv',
       hp=225,
       attacks=[
@@ -355,7 +359,7 @@ units = [
          Attack('Kaiser Blade', 15, 0.861, 'g', per_up=2, splash=True),
       ]
    ), Unit(
-      names=['spinecrawler','spine'],
+      names=['spinecrawler','spine','spine-crawler'],
       attrs='gabs',
       hp=300,
       armor=2,
@@ -365,7 +369,7 @@ units = [
          Attack('Impaler Tentacle', 25, 1.85, 'g'),
       ]
    ), Unit(
-      names=['sporecrawler','spore'],
+      names=['sporecrawler','spore','spore-crawler'],
       attrs='gabs',
       hp=400,
       armor=1,
@@ -378,20 +382,14 @@ units = [
       attrs='gabs',
       hp=200,
       per_up=0, #?
-      attacks=[
-      ]
    ), Unit(
       names=['viper'],
       attrs='fab',
       hp=120,
-      attacks=[
-      ]
    ), Unit(
       names=['swarmhost'],
       attrs='gab',
       hp=120,
-      attacks=[
-      ]
    ), Unit(
       names=['locust'],
       attrs='gb',
