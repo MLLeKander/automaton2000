@@ -270,7 +270,7 @@ units = [
       hp=30,
       attacks=[
          Attack('Attack Building', 80, 0.833, 'gs', per_up=5, splash=True),
-         Attack('Volatile Burst (v. light)', 35, 0.833, 'g', per_up=4,splash=True),
+         Attack('Volatile Burst (v. light)', 35, 0.833, 'gl', per_up=4,splash=True),
          Attack('Volatile Burst', 20, 0.833, 'g', per_up=2, splash=True),
       ]
    ), Unit(
