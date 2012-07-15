@@ -225,7 +225,7 @@ units = [
       attrs='flm',
       hp=80, shields=20,
    ), Unit(
-      names=['cannon'],
+      names=['photoncannon','photon-cannon','cannon'],
       attrs='gams',
       hp=150, shields=150,
       armor=1,
@@ -269,7 +269,7 @@ units = [
       attrs='gb',
       hp=30,
       attacks=[
-         Attack('Attack Building', 80, 0.833, 'g', per_up=5, splash=True),
+         Attack('Attack Building', 80, 0.833, 'gs', per_up=5, splash=True),
          Attack('Volatile Burst (v. light)', 35, 0.833, 'g', per_up=4,splash=True),
          Attack('Volatile Burst', 20, 0.833, 'g', per_up=2, splash=True),
       ]
