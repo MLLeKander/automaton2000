@@ -41,8 +41,9 @@ def handle(line, irc, match):
          output = attacker.name+' cannot hit '+defender.name
       else:
          hits = units.htk(attacker, defender, atk_up, armor_up, shield_up)
-         output = '%d %s hits for a %s to kill a %s (with %d overkill)' % \
-            (hits, attack.name, attacker.name, defender.name, abs(defender.hp))
+         output = '%d %s hits for a %s to kill a %s (in %d seconds, with %d' \
+                  ' overkill)' % (hits, attack.name, attacker.name, \
+                  defender.name, (hits-1)*attack.cooldown, abs(defender.hp))
       
    except ValueError:
       output = nick+': Unknown argument: '+args[counter]

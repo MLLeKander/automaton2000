@@ -9,6 +9,7 @@
     m - mechanical
     p - psionic
     s - structure '''
+import math
 
 
 class Attack:
@@ -29,15 +30,16 @@ class Attack:
       return 'g' in self.target_attrs and 'g' in opponent.attrs or \
              'f' in self.target_attrs and 'f' in opponent.attrs
 
-   def target(self, opponent, atk_up, armor_up, shield_up=0):
+   def target(self, opponent, atk_up=0, armor_up=0, shield_up=0):
       for i in range(self.volleys):
          opponent.take_hit(atk_up * self.per_up + self.dmg, armor_up, shield_up)
 
 class Unit:
-   def __init__(self, names, attrs, hp, mins=0, gas=0, attacks=[], shields=0, \
+   def __init__(self, names, race, attrs, hp, mins=0, gas=0, attacks=[], shields=0, \
                 armor=0, per_up=1):
       self.names = names
       self.name = names[0]
+      self.race = race
       self.attacks = attacks
       self.attrs = attrs
       self.hp = self.max_hp = hp
@@ -55,7 +57,7 @@ class Unit:
    def attack(self, opponent, atk_up=0, armor_up=0, shield_up=0):
       attack = self.can_attack(opponent)
       if not attack:
-         return false
+         return False
       
       attack.target(opponent, atk_up, armor_up, shield_up)
       return True
@@ -84,6 +86,7 @@ units = [
 
    Unit(
       names=['zeratul'],
+      race='p',
       attrs='glbp',
       hp=300, shields=100,
       attacks=[
@@ -92,6 +95,7 @@ units = [
       ]
    ), Unit(
       names=['probe'],
+      race='p',
       attrs='glm',
       mins=50,
       hp=20, shields=20,
@@ -100,6 +104,7 @@ units = [
       ]
    ), Unit(
       names=['zealot', 'lot'],
+      race='p',
       attrs='glb', 
       hp=100, shields=50,
       attacks=[
@@ -107,6 +112,7 @@ units = [
       ]
    ), Unit(
       names=['stalker'],
+      race='p',
       attrs='gam',
       hp=100, shields=50,
       attacks=[
@@ -115,6 +121,7 @@ units = [
       ]
    ), Unit(
       names=['sentry'],
+      race='p',
       attrs='glmp',
       hp=40, shields=40,
       attacks=[
@@ -123,6 +130,7 @@ units = [
    ), Unit(
 #TODO: Hardened Shields
       names=['immortal','immo'],
+      race='p',
       attrs='gam',
       hp=200, shields=100,
       attacks=[
@@ -131,6 +139,7 @@ units = [
       ]
    ), Unit(
       names=['colossus','colossi'],
+      race='p',
       attrs='gfamv',
       hp=200, shields=150,
       armor=1,
@@ -139,18 +148,21 @@ units = [
       ]
    ), Unit(
       names=['warpprism','wp'],
+      race='p',
       attrs='famp',
       hp=100, shields=100,
       attacks=[
       ]
    ), Unit(
       names=['observer','obs'],
+      race='p',
       attrs='flm',
       hp=40, shields=20,
       attacks=[
       ]
    ), Unit(
       names=['hightemplar','ht'],
+      race='p',
       attrs='glbp',
       hp=40, shields=40,
       attacks=[
@@ -158,6 +170,7 @@ units = [
       ]
    ), Unit(
       names=['darktemplar','dt'],
+      race='p',
       attrs='glbp',
       hp=40, shields=80,
       armor=1,
@@ -166,6 +179,7 @@ units = [
       ]
    ), Unit(
       names=['archon'],
+      race='p',
       attrs='gpv',
       hp=10, shields=350,
       attacks=[
@@ -174,6 +188,7 @@ units = [
       ]
    ), Unit(
       names=['phoenix','penix'],
+      race='p',
       attrs='flm',
       hp=120, shields=60,
       attacks=[
@@ -183,6 +198,7 @@ units = [
       ]
    ), Unit(
       names=['voidray','vr'],
+      race='p',
       attrs='fam',
       hp=100, shields=150,
       attacks=[
@@ -194,11 +210,13 @@ units = [
       ]
    ), Unit(
       names=['carrier'],
+      race='p',
       attrs='famv',
       hp=300, shields=250,
       armor=2,
    ), Unit(
       names=['interceptor'],
+      race='p',
       attrs='flm',
       hp=40, shields=40,
       attacks=[
@@ -206,6 +224,7 @@ units = [
       ]
    ), Unit(
       names=['mothership','mommaship'],
+      race='p',
       attrs='famv',
       hp=350, shields=350,
       armor=2,
@@ -214,6 +233,7 @@ units = [
       ]
    ), Unit(
       names=['tempest'],
+      race='p',
       attrs='famv',
       hp=300, shields=150,
       attacks=[
@@ -222,10 +242,12 @@ units = [
       ]
    ), Unit(
       names=['oracle'],
+      race='p',
       attrs='flm',
       hp=80, shields=20,
    ), Unit(
       names=['photoncannon','photon-cannon','cannon'],
+      race='p',
       attrs='gams',
       hp=150, shields=150,
       armor=1,
@@ -239,12 +261,14 @@ units = [
    
    Unit(
       names=['larva','larvae'],
+      race='z',
       attrs='glb',
       hp=25,
       armor=10,
       per_up=0,
    ), Unit(
       names=['drone'],
+      race='z',
       attrs='glb',
       hp=40,
       attacks=[
@@ -252,6 +276,7 @@ units = [
       ]
    ), Unit(
       names=['zergling','ling'],
+      race='z',
       attrs='glb',
       hp=35,
       attacks=[
@@ -259,13 +284,15 @@ units = [
       ]
    ), Unit(
       names=['crackling'],
+      race='z',
       attrs='glb',
       hp=35,
       attacks=[
          Attack('Claw', 5, 0.587, 'g'),
       ]
    ), Unit(
-      names=['baneling','bling'],
+      names=['baneling','bling','bane'],
+      race='z',
       attrs='gb',
       hp=30,
       attacks=[
@@ -275,6 +302,7 @@ units = [
       ]
    ), Unit(
       names=['queen'],
+      race='z',
       attrs='gbp',
       hp=175,
       armor=1,
@@ -285,6 +313,7 @@ units = [
       ]
    ), Unit(
       names=['roach'],
+      race='z',
       attrs='gab',
       hp=145,
       armor=1,
@@ -293,6 +322,7 @@ units = [
       ]
    ), Unit(
       names=['hydralisk','hydra'],
+      race='z',
       attrs='glb',
       hp=80,
       attacks=[
@@ -300,6 +330,7 @@ units = [
       ]
    ), Unit(
       names=['infestor'],
+      race='z',
       attrs='gabp',
       hp=90,
       attacks=[
@@ -309,6 +340,7 @@ units = [
       ]
    ), Unit(
       names=['infestedterran','infested','infested-terran'],
+      race='z',
       attrs='glb',
       hp=50,
       attacks=[
@@ -316,6 +348,7 @@ units = [
       ]
    ), Unit(
       names=['mutalisk','muta'],
+      race='z',
       attrs='flb',
       hp=120,
       attacks=[
@@ -323,6 +356,7 @@ units = [
       ]
    ), Unit(
       names=['corruptor'],
+      race='z',
       attrs='fab',
       hp=200,
       attacks=[
@@ -331,6 +365,7 @@ units = [
       ]
    ), Unit(
       names=['mutalisk','muta'],
+      race='z',
       attrs='flb',
       hp=120,
       attacks=[
@@ -338,6 +373,7 @@ units = [
       ]
    ), Unit(
       names=['broodlord','brood','bl','brood-lord'],
+      race='z',
       attrs='fabv',
       hp=225,
       attacks=[
@@ -345,6 +381,7 @@ units = [
       ]
    ), Unit(
       names=['broodling'],
+      race='z',
       attrs='glb',
       hp=30,
       attacks=[
@@ -352,6 +389,7 @@ units = [
       ]
    ), Unit(
       names=['ultralisk','ultra'],
+      race='z',
       attrs='gabv',
       hp=500,
       attacks=[
@@ -360,6 +398,7 @@ units = [
       ]
    ), Unit(
       names=['spinecrawler','spine','spine-crawler'],
+      race='z',
       attrs='gabs',
       hp=300,
       armor=2,
@@ -370,6 +409,7 @@ units = [
       ]
    ), Unit(
       names=['sporecrawler','spore','spore-crawler'],
+      race='z',
       attrs='gabs',
       hp=400,
       armor=1,
@@ -379,19 +419,23 @@ units = [
       ]
    ), Unit(
       names=['overlord','ol'],
+      race='z',
       attrs='gabs',
       hp=200,
       per_up=0, #?
    ), Unit(
       names=['viper'],
+      race='z',
       attrs='fab',
       hp=120,
    ), Unit(
       names=['swarmhost'],
+      race='z',
       attrs='gab',
       hp=120,
    ), Unit(
       names=['locust'],
+      race='z',
       attrs='gb',
       hp=110,
       attacks=[
@@ -409,11 +453,19 @@ def get_unit(name):
    return None
 
 def htk(attacker, defender, atk_up=0, armor_up=0, shield_up=0):
-   if attacker.can_attack(defender):
+   attack = attacker.can_attack(defender)
+   if attack:
       count = 0
       defender.reset_health()
+      regen = 0
+      
       while defender.hp > 0:
-         attacker.attack(defender, atk_up, armor_up, shield_up)
+         attack.target(defender, atk_up, armor_up, shield_up)
+         if defender.race == 'z':
+            regen += 0.27 * attack.cooldown
+            if regen >= 1:
+               defender.hp += math.floor(regen)
+               regen -= math.floor(regen)
          count += 1
       return count
    
