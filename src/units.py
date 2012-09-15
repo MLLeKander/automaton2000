@@ -147,7 +147,7 @@ units = [
          Attack('Thermal Lance', 15, 1.65, 'g', per_up=2, volleys=2, splash=True),
       ]
    ), Unit(
-      names=['warpprism','wp'],
+      names=['warpprism','warp-prism','wp'],
       race='p',
       attrs='famp',
       hp=100, shields=100,
@@ -193,11 +193,11 @@ units = [
       hp=120, shields=60,
       attacks=[
 #TODO: Can't attack massive... but not a big deal.
-         Attack('Ion Cannon (v. light)', 10, 1.11, 'gfb', volleys=2),
+         Attack('Ion Cannon (v. light)', 10, 1.11, 'gfl', volleys=2),
          Attack('Ion Cannon', 5, 1.11, 'gf', volleys=2),
       ]
    ), Unit(
-      names=['voidray','vr'],
+      names=['voidray','void-ray','vr'],
       race='p',
       attrs='fam',
       hp=100, shields=150,
@@ -223,7 +223,7 @@ units = [
          Attack('Interceptor Beam', 5, 3, 'gf', volleys=2),
       ]
    ), Unit(
-      names=['mothership','mommaship'],
+      names=['mothership','mother-ship','mommaship'],
       race='p',
       attrs='famv',
       hp=350, shields=350,
@@ -236,9 +236,10 @@ units = [
       race='p',
       attrs='famv',
       hp=300, shields=150,
+      armor=1,
       attacks=[
-         Attack('LAZAR BEEM (v. massive)', 60, 6, 'gfv'),
-         Attack('LAZAR BEEM', 45, 6, 'gfv'),
+         Attack('Storm Sphere (v. massive)', 50, 3.3, 'gfv'),
+         Attack('Storm Sphere', 30, 3.3, 'gfv'),
       ]
    ), Unit(
       names=['oracle'],
@@ -339,7 +340,7 @@ units = [
          Attack('Fungal Growth', 30, 4, 'gf', per_up=0),
       ]
    ), Unit(
-      names=['infestedterran','infested','infested-terran'],
+      names=['infestedterran','infested-terran','infested'],
       race='z',
       attrs='glb',
       hp=50,
@@ -372,7 +373,7 @@ units = [
          Attack('Glaive Wurm', 9, 1.5246, 'gf'),
       ]
    ), Unit(
-      names=['broodlord','brood','bl','brood-lord'],
+      names=['broodlord','brood-lord','brood','bl'],
       race='z',
       attrs='fabv',
       hp=225,
@@ -397,7 +398,7 @@ units = [
          Attack('Kaiser Blade', 15, 0.861, 'g', per_up=2, splash=True),
       ]
    ), Unit(
-      names=['spinecrawler','spine','spine-crawler'],
+      names=['spinecrawler','spine-crawler','spine'],
       race='z',
       attrs='gabs',
       hp=300,
@@ -408,7 +409,7 @@ units = [
          Attack('Impaler Tentacle', 25, 1.85, 'g'),
       ]
    ), Unit(
-      names=['sporecrawler','spore','spore-crawler'],
+      names=['sporecrawler','spore-crawler','spore'],
       race='z',
       attrs='gabs',
       hp=400,
@@ -418,7 +419,7 @@ units = [
          Attack('Seeker Spore', 15, 0.8608, 'f'),
       ]
    ), Unit(
-      names=['overlord','ol'],
+      names=['overlord','over-lord','ol'],
       race='z',
       attrs='gabs',
       hp=200,
@@ -429,17 +430,226 @@ units = [
       attrs='fab',
       hp=120,
    ), Unit(
-      names=['swarmhost'],
+      names=['swarmhost', 'swarm-host'],
       race='z',
       attrs='gab',
       hp=120,
    ), Unit(
       names=['locust'],
       race='z',
-      attrs='gb',
-      hp=110,
+      attrs='glb',
+      hp=65,
       attacks=[
-         Attack('Locust Attack', 14, 0.8608, 'gf'),
+          # TODO: Real attack name?
+          Attack('Locust Attack', 14, 0.8608, 'g'),
+      ]
+   ),
+
+   # Terran Units
+
+   Unit(
+      names=['SCV'],
+      race='t',
+      attrs='glm',
+      hp=45,
+      attacks=[
+         Attack('Fusion Cutter', 5, 1.5, 'g'),
+      ]
+   ), Unit(
+      names=['MULE'],
+      race='t',
+      attrs='glm',
+      hp=60,
+   ), Unit(
+      names=['marine'],
+      race='t',
+      attrs='glb',
+      hp=45,
+      attacks=[
+         Attack('C-14 Rifle', 6, 0.8608, 'gf'),
+      ]
+   ), Unit(
+      names=['combat-shielded-marine', 'csmarine', 'combatmarine', 'combat-marine'],
+      race='t',
+      attrs='glb',
+      hp=55,
+      attacks=[
+         Attack('C-14 Rifle', 6, 0.8608, 'gf'),
+      ]
+   ), Unit(
+      names=['stimpack-marine', 'stimmarine', 'stim-marine', 'stimmedmarine', 'stimmed-marine'],
+      race='t',
+      attrs='glb',
+      hp=45,
+      attacks=[
+         Attack('C-14 Rifle (w/ stim)', 6, 0.5739, 'gf'),
+      ]
+   ), Unit(
+      names=['marauder'],
+      race='t',
+      attrs='gab',
+      hp=125,
+      armor=1,
+      attacks=[
+         Attack('Punisher Grenade (v. armored)', 20, 1.5, 'ga'),
+         Attack('Punisher Grenade', 10, 1.5, 'g'),
+      ]
+   ), Unit(
+      names=['stimpack-marauder', 'stimmarauder', 'stim-marauder', 'stimmedmarauder', 'stimmed-marauder'],
+      race='t',
+      attrs='gab',
+      hp=125,
+      armor=1,
+      attacks=[
+         Attack('Punisher Grenade (v. armored, w/ stim)', 20, 1, 'ga'),
+         Attack('Punisher Grenade (w/ stim)', 10, 1, 'g'),
+      ]
+   ), Unit(
+      names=['reaper'],
+      race='t',
+      attrs='glb',
+      hp=50,
+      attacks=[
+         Attack('D-8 Charges', 30, 1.8, 'gb'),
+         Attack('P-38 Reaper pistol (v. light)', 9, 1.1, 'gl'),
+         Attack('P-38 Reaper pistol', 4, 1.1, 'g'),
+      ]
+   ), Unit(
+      names=['ghost'],
+      race='t',
+      attrs='gpb',
+      hp=100,
+      attacks=[
+         Attack('C-10 Rifle (v. light)', 20, 1.5, 'gfl'),
+         Attack('C-10 Rifle', 10, 1.5, 'gfl'),
+      ]
+   ), Unit(
+      names=['hellion'],
+      race='t',
+      attrs='glm',
+      hp=90,
+      attacks=[
+         Attack('Infernal Flamethrower (v. light)', 14, 2.5, 'gl'),
+         Attack('Infernal Flamethrower', 8, 2.5, 'g'),
+      ]
+   ), Unit(
+      names=['blue-flame-hellion', 'blueflamehellion', 'bfhellion'],
+      race='t',
+      attrs='glm',
+      hp=90,
+      attacks=[
+         Attack('Infernal Flamethrower (v. light)', 19, 2.5, 'gl'),
+         Attack('Infernal Flamethrower', 8, 2.5, 'g'),
+      ]
+   ), Unit(
+      names=['tank'],
+      race='t',
+      attrs='gam',
+      hp=160,
+      armor=1,
+      attacks=[
+         Attack('90 mm Twin Cannon (v. armored)', 25, 1.04, 'ga', per_up=3),
+         Attack('90 mm Twin Cannon', 15, 1.04, 'g', per_up=2),
+      ]
+   ), Unit(
+      names=['siege-tank','siegetank'],
+      race='t',
+      attrs='gam',
+      hp=160,
+      armor=1,
+      attacks=[
+         Attack('120 mm Shock Cannon (v. armored)', 50, 3, 'ga', per_up=5, splash=True),
+         Attack('120 mm Shock Cannon', 35, 3, 'g', per_up=3, splash=True),
+      ]
+   ), Unit(
+      names=['thor'],
+      race='t',
+      attrs='gamv',
+      hp=400,
+      armor=1,
+      attacks=[
+         Attack('Thor\'s Hammer', 30, 1.28, 'g', per_up=3, volleys=2),
+         Attack('Javelin Missile (v. light)', 12, 3, 'fl', volleys=4, splash=True),
+         Attack('Javelin Missile', 6, 3, 'f', volleys=4, splash=True),
+      ]
+   ), Unit(
+      names=['viking'],
+      race='t',
+      attrs='fam',
+      hp=125,
+      attacks=[
+         Attack('Lanzer Torpedo (v. armored)', 14, 2, 'f', per_up=2, volleys=2),
+         Attack('Lanzer Torpedo', 10, 2, 'f', volleys=2),
+         Attack('Twin Gatling Cannon', 12, 1, 'g'),
+      ]
+   ), Unit(
+      names=['medivac'],
+      race='t',
+      attrs='fam',
+      hp=150,
+   ), Unit(
+      names=['raven'],
+      race='t',
+      attrs='flm',
+      hp=140,
+      armor=1,
+   ), Unit(
+      names=['pointdefensedrone','point-defense-drone','pdd'],
+      race='t',
+      attrs='flmb',
+      hp=50,
+      per_up=2,
+   ), Unit(
+      names=['seekermissile','seeker-missile','hunterseeker','hsm'],
+      race='t',
+      attrs='',
+      hp=1,
+      attacks=[
+         Attack('Seeker Missile', 100, 0, 'gf'),
+      ]
+   ), Unit(
+      names=['autoturret','auto-turret'],
+      race='t',
+      attrs='gams',
+      hp=150,
+      armor=1,
+      attacks=[
+         Attack('12mm Gauss Cannon', 8, 0.8, 'gf'),
+      ]
+   ), Unit(
+      names=['banshee'],
+      race='t',
+      attrs='flm',
+      hp=140,
+      attacks=[
+         Attack('Backlash Rocket', 12, 1.25, 'g', volleys=2),
+      ]
+   ), Unit(
+      names=['battlecruiser','battle-cruiser','cattlebruiser','bc'],
+      race='t',
+      attrs='famv',
+      hp=550,
+      armor=3,
+      attacks=[
+         Attack('ATS Laser Battery (v. air)', 6, 0.225, 'f'),
+         Attack('ATS Laser Battery (v. ground)', 8, 0.225, 'f'),
+      ]
+   ), Unit(
+      names=['planetaryfortress','planetary-fortress','pf'],
+      race='t',
+      attrs='gams',
+      hp=1500,
+      armor=3,
+      attacks=[
+         Attack('Ibiks Cannon', 40, 2, 'g', splash=True),
+      ]
+   ), Unit(
+      names=['missileturret','missile-turret','turret'],
+      race='t',
+      attrs='gams',
+      hp=250,
+      attacks=[
+         Attack('Longbolt Missile', 12, 0.8608, 'f', volleys=2),
       ]
    ),
 ]
