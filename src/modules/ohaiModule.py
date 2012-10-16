@@ -2,9 +2,9 @@ import random
 
 def handle(line, irc, match):
    responses = [
-      'I read ya... sir.',
-      '{0}, you rang?',
-      'What do you want, {0}?',
+      'The fuck do you want... sir?',
+      '{0}, you are such a noobcock!',
+      'Stop talking to me like that, {0}!',
    ]
 
    nick,_,_,chan,msg = match
