@@ -1,7 +1,10 @@
 import re
 import importlib
 import socket
+import time
 import threading
+
+#TODO: insert shit in path here
 import modules
 
 regex = ':(?P<nick>[^ ]*)!~(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
@@ -27,6 +30,17 @@ class IRCBot(threading.Thread):
    def send(self, line):
       self.logger.debug(self.server+' < '+line.rstrip())
       self._con.send(bytes((line+'\r\n').encode('utf-8')))
+
+
+   def receive(self):
+      try:
+         data = self._con.recv(1024)
+      except socket.timeout:
+         return None
+      if data:
+         return data.decode('utf-8')
+      else:
+         return None
    
    
    def sendchan(self, chan, line):
@@ -41,13 +55,10 @@ class IRCBot(threading.Thread):
       return [match.group(key) for key in ['nick','user','host','chan','msg']]
    
    
-   def run(self):
-      while not self.terminate.isSet():
-         self.run_once()
-
-
-   def terminate(self):
+   def stop(self):
+      self.logger.debug("Thread was requested to stop.")
       self.terminate.set()
+      #self.join()
 
 
    def reload(self):
@@ -55,26 +66,33 @@ class IRCBot(threading.Thread):
       #TODO: Reload module config
    
    
-   def run_once(self):
+   def run(self):
       self._con = socket.socket()
       self._con.connect((self.server, self.port))
-      
+      self._con.settimeout(1)
       self.send('USER %s %s %s %s' % (self.nick, self.nick, self.nick, self.nick))
       self.send('NICK %s' % (self.nick))
       for channel in self.channels:
          self.send('JOIN %s' % (channel))
+      #ircfile = self._con.makefile()
       
-      ircfile = self._con.makefile()
-
-      for line in ircfile:
-         line = line.rstrip('\r\n')
-         self.logger.debug(self.server+" > "+line)
-         match = self.match_privmsg(line)
-         for module in self.modules:
-            if module.handle(line, self, match, self.logger):
-               break;
+      try:
+         while not self.terminate.isSet():
+            data = self.receive()
+            if not data:
+               time.sleep(0.5)
+               continue
+            else:
+               lines = data.split('\r\n')
+               for line in lines:
+                  self.logger.debug(self.server+" > "+line)
+                  match = self.match_privmsg(line)
+                  for module in self.modules:
+                     if module.handle(line, self, match, self.logger):
+                        break;
       
-      ircfile.close()
-      self._con.close()
+      finally:
+         self.send('QUIT :Automaton destroyed')
+         self._con.close()
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et
