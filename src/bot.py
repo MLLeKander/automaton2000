@@ -17,6 +17,7 @@ class IRCBot(threading.Thread):
       self.modules = modules
       self.trigger = trigger
       self.re_trig = re.compile(regex.format(re.escape(self.trigger)))
+      self.terminate = False
    
    
    def send(self, line):
@@ -38,8 +39,11 @@ class IRCBot(threading.Thread):
    
    
    def run(self):
-      while True:
+      while True and not self.terminate:
          self.run_once()
+
+   def terminate(self):
+      self.terminate = true
    
    
    def run_once(self):
@@ -64,3 +68,5 @@ class IRCBot(threading.Thread):
       
       ircfile.close()
       self._con.close()
+
+# vim:ts=3:sts=3:sw=3:tw=80:sta:et
