@@ -1,6 +1,6 @@
 import random
 
-def handle(line, irc, match):
+def handle(line, irc, match, logger):
    responses = [
       'The fuck do you want... sir?',
       '{0}, you are such a noobcock!',

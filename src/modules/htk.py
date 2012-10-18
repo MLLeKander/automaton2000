@@ -1,6 +1,6 @@
 import units
 
-def handle(line, irc, match):
+def handle(line, irc, match, logger):
    nick,_,_,chan,msg = match
    
    if not msg or not msg.startswith('htk'):

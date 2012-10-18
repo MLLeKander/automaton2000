@@ -28,3 +28,6 @@ pip-log.txt
 
 # vim tmp files
 *.swp
+
+# Our log file
+home/automaton2000.log

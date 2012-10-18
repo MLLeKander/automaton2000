@@ -1,0 +1,10 @@
+---
+servers:
+   - host: irc.freenode.net
+     port: 6667
+     channels: ["##starcraft"]
+     nick: kaibot
+     trigger: "!"
+     modules: [ohai, htk, stats, ping]
+
+# vim:ts=2:sts=2:sw=3:tw=80:sta:et

@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8:
 import units
 
-def handle(line, irc, match):
-   _,_,_,chan,msg = match
+def handle(line, irc, match, logger):
+   nick,_,_,chan,msg = match
    if not msg:
       return False
 
@@ -12,8 +12,10 @@ def handle(line, irc, match):
    if not args[0] in keys:
       return False
 
+
    try:
       unit = units.get_unit(args[1])
+      logger.info("User %s requested stats for %s" % (nick, args[1]))
    except IndexError:
       irc.sendchan(chan, "Please provide a unit name")
       return True
@@ -24,6 +26,7 @@ def handle(line, irc, match):
       return True
 
    else:
+      logger.info("User %s requested stats for %s" % (nick, unit.name))
       if args[0] in ['longstats', 'ls']:
          # Description
          irc.sendchan(chan, unit.description)
