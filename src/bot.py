@@ -16,25 +16,23 @@ class IRCBot(threading.Thread):
       self.port = port
       self.channels = channels
       self.nick = nick
-      #self.modules = modules
       self.modules = [importlib.import_module("modules.%s" % m) for m in mods]
       self.trigger = trigger
       self.logger = logger
       self.re_trig = re.compile(regex.format(re.escape(self.trigger)))
       self.terminate = threading.Event()
+      #TODO: Load module specific config
    
    
    def send(self, line):
-      #print(self.server+' < '+line.rstrip())
       self.logger.debug(self.server+' < '+line.rstrip())
-      self._con.send(line+'\r\n')
+      self._con.send(bytes((line+'\r\n').encode('utf-8')))
    
    
    def sendchan(self, chan, line):
       self.send("PRIVMSG %s :%s\r\n" % (chan,line))
    
-   
-#TODO: Perhaps move this to a utils file
+
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
       match = re.match(line)
@@ -47,8 +45,14 @@ class IRCBot(threading.Thread):
       while not self.terminate.isSet():
          self.run_once()
 
+
    def terminate(self):
       self.terminate.set()
+
+
+   def reload(self):
+      [reload(m) for m in self.modules]
+      #TODO: Reload module config
    
    
    def run_once(self):
@@ -64,8 +68,6 @@ class IRCBot(threading.Thread):
 
       for line in ircfile:
          line = line.rstrip('\r\n')
-#TODO: Proper logging
-         #print(self.server+" > "+line)
          self.logger.debug(self.server+" > "+line)
          match = self.match_privmsg(line)
          for module in self.modules:
