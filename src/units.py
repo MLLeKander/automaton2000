@@ -63,9 +63,13 @@ class Unit:
       return True
    
    def take_hit(self, dmg, armor_up, shield_up=0):
-#TODO: How does base armor work with Protoss?
+	 #TODO: How does base armor work with Protoss?
       if self.shields > 0:
-         dmg = max(0.5, dmg - shield_up)
+         if self.name == 'immortal' and dmg > 10:
+					  dmg = 10
+				 else
+				    dmg = max(0.5, dmg - shield_up)
+
          self.shields -= dmg
          if self.shields <= 0:
             dmg = abs(self.shields)
