@@ -14,7 +14,8 @@ import math
 
 class Attack:
    def __init__(self, name, dmg, cooldown, target_attrs, per_up=1, \
-                splash=False, volleys=1):
+				    splash=False, volleys=1):
+
       self.name = name
       self.dmg = dmg
       self.cooldown = cooldown
@@ -34,9 +35,21 @@ class Attack:
       for i in range(self.volleys):
          opponent.take_hit(atk_up * self.per_up + self.dmg, armor_up, shield_up)
 
+   def __str__(self):
+      if self.volleys > 1:
+         return "%s: %i x %d dmg / %.1f sec (%.1f dps)" % (self.name, self.volleys, self.dmg, self.cooldown, (self.dmg/self.cooldown))
+      else:
+         return "%s: %d dmg / %.1f sec (%.1f dps)" % (self.name, self.dmg, self.cooldown, (self.dmg/self.cooldown))
+   def __repr__(self):
+      return self.__str__()
+
+
 class Unit:
-   def __init__(self, names, race, attrs, hp, mins=0, gas=0, attacks=[], shields=0, \
-                armor=0, per_up=1):
+   def __init__(self, names, race, attrs, hp, minerals=0, gas=0, attacks=[], shields=0, \
+                armor=0, per_up=1, \
+                liquipedia = '', description = '', buildtime=0, \
+                supply=1, requires=[]):
+
       self.names = names
       self.name = names[0]
       self.race = race
@@ -47,6 +60,14 @@ class Unit:
       self.armor = armor
       self.per_up = per_up
    
+      self.liquipedia = liquipedia
+      self.description = description
+      self.buildtime = buildtime
+      self.minerals = minerals
+      self.gas = gas
+      self.supply = supply
+      self.requires = requires
+
    def can_attack(self, opponent):
       for attack in self.attacks:
          if attack.can_target(opponent):
@@ -66,9 +87,9 @@ class Unit:
 	 #TODO: How does base armor work with Protoss?
       if self.shields > 0:
          if self.name == 'immortal' and dmg > 10:
-					  dmg = 10
-				 else
-				    dmg = max(0.5, dmg - shield_up)
+            dmg = 10
+         else:
+            dmg = max(0.5, dmg - shield_up)
 
          self.shields -= dmg
          if self.shields <= 0:
@@ -79,6 +100,11 @@ class Unit:
    
       dmg = max(0.5, dmg - armor_up*self.per_up - self.armor)
       self.hp -= dmg
+
+   def __str__(self):
+      return self.name
+   def __repr__(self):
+      return self.__str__()
    
 #TODO: So rediculously ugly...
    def reset_health(self):
@@ -101,7 +127,7 @@ units = [
       names=['probe'],
       race='p',
       attrs='glm',
-      mins=50,
+      minerals=50,
       hp=20, shields=20,
       attacks=[
          Attack('Particle Beam', 5, 1.5, 'g'),
@@ -663,7 +689,7 @@ def get_unit(name):
    for unit in units:
       if name in unit.names:
          return unit
-   
+
    return None
 
 def htk(attacker, defender, atk_up=0, armor_up=0, shield_up=0):
@@ -684,3 +710,5 @@ def htk(attacker, defender, atk_up=0, armor_up=0, shield_up=0):
       return count
    
    return -1
+
+# vim:ts=3:sts=3:sw=3:tw=80:sta:et
