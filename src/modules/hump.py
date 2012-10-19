@@ -1,3 +1,5 @@
+from random import choice
+
 def handle(line, irc, match, logger):
    nick,_,_,chan,msg = match
    if not msg:
@@ -9,12 +11,17 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
+   logger.info("Handling hump request: %s" % msg)
 
-   try:
-      irc.sendchan(chan, "/me has crazy ass, sweaty sex that is forbidden in 7 states with %s." % args[1])
-   except IndexError:
-      irc.sendchan(chan, "That's not gonna work, %s." % nick)
+   sexual_options = [
+         "has crazy ass, electric intercourse that is forbidden in 7 states with %s.",
+         "would rather chop his manly wire off than have intercourse with %s, to be honest."
+         ]
 
+   if args[1]:
+      irc.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(args[1:]))
+   else:
+      irc.sendchan(chan, "Who would you like me to have sexy time with, %s?" % nick)
 
    return True
 

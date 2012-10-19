@@ -12,6 +12,7 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
+   logger.info("Handling stats request for %s: %s" % (nick, msg))
 
    try:
       unit = units.get_unit(args[1])

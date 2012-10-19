@@ -1,10 +1,10 @@
 import re
 import importlib
+from imp import reload
 import socket
 import time
 import threading
-
-#TODO: insert shit in path here
+import logging
 import modules
 
 regex = ':(?P<nick>[^ ]*)!~(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
@@ -13,7 +13,7 @@ regex = ':(?P<nick>[^ ]*)!~(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
 re_notrig = re.compile(regex.format(''))
 
 class IRCBot(threading.Thread):
-   def __init__(self, server, port, channels, nick, mods, trigger, logger):
+   def __init__(self, server, port, channels, nick, mods, trigger):
       threading.Thread.__init__(self)
       self.server = server
       self.port = port
@@ -21,7 +21,7 @@ class IRCBot(threading.Thread):
       self.nick = nick
       self.modules = [importlib.import_module("modules.%s" % m) for m in mods]
       self.trigger = trigger
-      self.logger = logger
+      self.logger = logging.getLogger("automaton2000")
       self.re_trig = re.compile(regex.format(re.escape(self.trigger)))
       self.terminate = threading.Event()
       #TODO: Load module specific config
@@ -38,7 +38,8 @@ class IRCBot(threading.Thread):
       except socket.timeout:
          return None
       if data:
-         return data.decode('utf-8')
+         data = data.decode('utf-8')
+         return data
       else:
          return None
    
@@ -58,10 +59,10 @@ class IRCBot(threading.Thread):
    def stop(self):
       self.logger.debug("Thread was requested to stop.")
       self.terminate.set()
-      #self.join()
 
 
    def reload(self):
+      self.logger.info("Reloading all modules")
       [reload(m) for m in self.modules]
       #TODO: Reload module config
    
@@ -74,7 +75,6 @@ class IRCBot(threading.Thread):
       self.send('NICK %s' % (self.nick))
       for channel in self.channels:
          self.send('JOIN %s' % (channel))
-      #ircfile = self._con.makefile()
       
       try:
          while not self.terminate.isSet():
@@ -85,6 +85,7 @@ class IRCBot(threading.Thread):
             else:
                lines = data.split('\r\n')
                for line in lines:
+                  if line.strip() == '': continue
                   self.logger.debug(self.server+" > "+line)
                   match = self.match_privmsg(line)
                   for module in self.modules:
@@ -92,7 +93,9 @@ class IRCBot(threading.Thread):
                         break;
       
       finally:
+         self.logger.debug("Bot quitting")
          self.send('QUIT :Automaton destroyed')
          self._con.close()
+         self.logger.info("Socked closed. Thread terminating immediately.")
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et

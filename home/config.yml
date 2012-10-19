@@ -1,11 +1,13 @@
 ---
 loglevel: debug
+uid: 1000
+gid: 1000
 servers:
    - host: irc.freenode.net
      port: 6667
      channels: ["##starcraft"]
-     nick: kaibot2
+     nick: kaibot
      trigger: "!"
-     modules: [ohai, htk, stats, ping, kill, hump]
+     modules: [ohai, htk, stats, ping, kill, hump, reload]
 
 # vim:ts=2:sts=2:sw=3:tw=80:sta:et

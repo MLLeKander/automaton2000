@@ -5,6 +5,8 @@ def handle(line, irc, match, logger):
    
    if not msg or not msg.startswith('htk'):
       return False
+
+   logger.info("Handling htk request from %s: %s" % (nick, msg))
    
    args = msg.split()
    
