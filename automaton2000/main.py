@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 import signal
 import os.path
+import sys
+import pwd, grp
 from os import execl
 import logging
 from logging.handlers import SysLogHandler
-import sys
 from time import sleep
 
 import yaml
-from bot import IRCBot
+from automaton2000.bot import IRCBot
 
 # Logger
 logger = logging.getLogger("automaton2000")
@@ -19,7 +20,7 @@ logger.addHandler(slh)
 
 # Load settings
 try:
-   home = '/home/chris/dev/automaton2000/home'
+   home = '/etc/automaton2000'
    configfile = os.path.join(home, "config.yml")
    hconfigfile = open(configfile, 'r')
    config = yaml.load(hconfigfile.read())
@@ -37,19 +38,6 @@ level = level.upper()
 logger.setLevel(level)
 slh.setLevel(level)
 
-pidfile = '/var/run/automaton2000/lock.pid'
-
-try:
-   with open(pidfile,'r') as pf:
-      pid = int(pf.read().strip())
-
-except IOError:
-   pid = None
-
-if pid:
-   logger.critical("Pidfile %s already exists. Daemon already running?" % pidfile)
-   sys.exit(1)
-
 try: 
    pid = os.fork() 
    if pid > 0:
@@ -62,16 +50,25 @@ except OSError as err:
    sys.exit(1)
 
 # decouple from parent environment
-os.chdir('/') 
 os.setsid() 
-
-# Change our effective user, if we're root and have a target uid.
-if os.getuid() == 0 and config['uid']:
-   os.setgid(int(config['uid']))
-   os.setuid(int(config['gid']))
-
-# Fix the umask
 os.umask(0) 
+
+if os.getuid() == 0 and config['user']:
+   # Get uid and gid for the given names.
+   try:
+      (_,_,uid,_,_,_,_) = pwd.getpwnam(config['user'])
+      (_,_,gid,_) = grp.getgrnam(config['group'])
+   except KeyError:
+      logger.critical("Invalid username/group. Daemon halting.")
+      sys.exit(1)
+
+   # Set gid first. After dropping root as uid, we can't change groups any more.
+   os.setgid(gid)
+   os.setuid(uid)
+   sys.stderr.write("Switched to uid %i and gid %i." % (uid, gid))
+else:
+   sys.stderr.write("We're not dropping privileges, and running as uid %i" % os.getuid())
+os.chdir('/') 
 
 # do second fork
 try: 
@@ -85,22 +82,29 @@ except OSError as err:
    sys.exit(1) 
 
 
+# Try to create our pidfile. Quit if it exists.
+pidfilep = '/var/run/automaton2000/automaton.pid'
+try:
+   pidfile = open(pidfilep, 'x')
+except FileExistsError:
+   logger.critical("Pidfile %s already exists. Daemon already running?" % pidfilep)
+   sys.exit(1)
+else:
+   pid = str(os.getpid())
+   pidfile.write(pid)
+   pidfile.close()
+
+
 # redirect standard file descriptors
 sys.stdout.flush()
 sys.stderr.flush()
-si = open(os.devnull, 'r')
-so = open(os.devnull, 'a+')
-se = open(os.devnull, 'a+')
+#si = open(os.devnull, 'r')
+#so = open(os.devnull, 'a+')
+#se = open(os.devnull, 'a+')
 
-os.dup2(si.fileno(), sys.stdin.fileno())
-os.dup2(so.fileno(), sys.stdout.fileno())
-os.dup2(se.fileno(), sys.stderr.fileno())
-
-
-# write pidfile
-pid = str(os.getpid())
-with open(pidfile,'w+') as f:
-   f.write(pid + '\n')
+#os.dup2(si.fileno(), sys.stdin.fileno())
+#os.dup2(so.fileno(), sys.stdout.fileno())
+#os.dup2(se.fileno(), sys.stderr.fileno())
 
 
 logger.debug("Starting set up")
@@ -114,10 +118,10 @@ def handleUSR1(sig, fram):
          bot.stop()
          bot.join()
 
-   os.remove(pidfile)
+   os.remove(pidfilep)
    sleep(1)
    # Absolute path!
-   execl("/home/chris/dev/automaton2000/src/automaton2000.py", "automaton2000")
+   execl("automaton2000", "")
 
 signal.signal(signal.SIGUSR1, handleUSR1)
 
@@ -129,22 +133,23 @@ signal.signal(signal.SIGINT, handleINT)
 signal.signal(signal.SIGTERM, handleINT)
 
 
-# And here's the main meat
-bots = [IRCBot(s['host'], s['port'], s['channels'], s['nick'], s['modules'], s['trigger'])
-         for s in config['servers']]
+def run():
+   # And here's the main meat
+   bots = [IRCBot(s['host'], s['port'], s['channels'], s['nick'], s['modules'], s['trigger'])
+            for s in config['servers']]
 
 
-logger.info("Set up complete. Starting botnet")
-for bot in bots:
-   bot.daemon = True
-   bot.start()
+   logger.info("Set up complete. Starting botnet")
+   for bot in bots:
+      bot.daemon = True
+      bot.start()
 
 
-for bot in bots:
-   bot.join()
+   for bot in bots:
+      bot.join()
 
 
-os.remove(pidfile)
-logger.info("Master thread terminating.")
+   os.remove(pidfilep)
+   logger.info("Master thread terminating.")
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et

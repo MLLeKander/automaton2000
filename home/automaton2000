@@ -16,7 +16,7 @@ fi
 case "$1" in
  start)
    stat_busy "Starting $DAEMON"
-   [[ -z "$PID" ]] && /home/chris/dev/automaton2000/src/automaton2000.py &>/dev/null
+   [[ -z "$PID" ]] && $DAEMON &>/dev/null
    if [[ "$?" == "0" ]]; then
      add_daemon $DAEMON
      stat_done

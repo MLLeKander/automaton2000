@@ -1,0 +1,13 @@
+pre_install() {
+	useradd -r -s /bin/false automaton2000
+}
+
+post_install() {
+	chown automaton2000:automaton2000 -R /var/run/automaton2000
+}
+
+post_remove() {
+	userdel automaton2000
+}
+
+# vim:set ts=2 sw=2 et:

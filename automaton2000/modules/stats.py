@@ -1,5 +1,5 @@
 # vim: set fileencoding=utf-8:
-import units
+from automaton2000 import units
 
 def handle(line, irc, match, logger):
    nick,_,_,chan,msg = match

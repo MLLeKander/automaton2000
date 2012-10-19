@@ -5,7 +5,7 @@ import socket
 import time
 import threading
 import logging
-import modules
+import automaton2000.modules
 
 regex = ':(?P<nick>[^ ]*)!~(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
 'PRIVMSG (?P<chan>[^ ]*) :{0}(?P<msg>.*)'
@@ -19,7 +19,7 @@ class IRCBot(threading.Thread):
       self.port = port
       self.channels = channels
       self.nick = nick
-      self.modules = [importlib.import_module("modules.%s" % m) for m in mods]
+      self.modules = [importlib.import_module("automaton2000.modules.%s" % m) for m in mods]
       self.trigger = trigger
       self.logger = logging.getLogger("automaton2000")
       self.re_trig = re.compile(regex.format(re.escape(self.trigger)))

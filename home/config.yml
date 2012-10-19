@@ -1,13 +1,20 @@
 ---
-loglevel: debug
-uid: 1000
-gid: 1000
+# Suggest you leave this at info, unless you enjoy gargantuan log files.
+loglevel: info
+
+# Run as this user and group
+user: automaton2000
+group: automaton2000
+
+# Define our servers
 servers:
    - host: irc.freenode.net
      port: 6667
      channels: ["##starcraft"]
      nick: kaibot
+     # Recognize commands prepended with this
      trigger: "!"
+     # A list of modules to load for this server
      modules: [ohai, htk, stats, ping, kill, hump, reload]
 
 # vim:ts=2:sts=2:sw=3:tw=80:sta:et
