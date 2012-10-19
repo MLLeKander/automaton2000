@@ -1,8 +1,5 @@
-pre_install() {
-	useradd -r -s /bin/false automaton2000
-}
-
 post_install() {
+	useradd -r -s /bin/false automaton2000
 	chown automaton2000:automaton2000 -R /var/run/automaton2000
 }
 

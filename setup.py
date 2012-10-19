@@ -12,8 +12,7 @@ setup(
 		version='0.1',
 		description='A simple, modular IRC bot',
 		author='##starcraft@Freenode',
-		install_requires=['pyyaml'],
-		#scripts=['automaton2000/main.py'],
+		install_requires=['pyyaml', 'distribute'],
 		zip_safe = True,
 		entry_points = {
 				'console_scripts': [
