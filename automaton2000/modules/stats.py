@@ -47,7 +47,7 @@ def handle(line, irc, match, logger):
             costs.append("%i seconds" % unit.buildtime)
 
          if len(costs) > 0:
-            output = "Costs: " + (", ".join(costs))
+            output = "Costs: " + (", ".join(costs)) + "."
             irc.sendchan(chan, output)
 
          # Combat
