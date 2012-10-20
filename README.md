@@ -4,7 +4,7 @@ The IRC bot at use at `##starcraft@freenode.net`. The name is a reference to a r
 
 ## Installation
 
-Just run `setup.py install` as you normally would. If you happen to be running Arch Linux, a PKGBUILD is included. We currently use hardcoded paths for most things. Please see #2.
+Just run `setup.py install` as you normally would. If you happen to be running Arch Linux, a PKGBUILD is included. We currently use hardcoded paths for most things. Please see issue #2.
 
 ## Modules
 
