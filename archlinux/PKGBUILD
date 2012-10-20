@@ -11,7 +11,7 @@ depends=('python' 'python-yaml' 'python-distribute')
 provides=('automaton2000')
 backup=('etc/automaton2000/config.yml')
 install='automaton2000.install'
-source=('Automaton2000-0.1.tar.gz', 'automaton2000')
+source=('automaton2000-0.1.tar.gz', 'automaton2000')
 md5sums=()
 
 package() {

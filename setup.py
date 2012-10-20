@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(
-		name = 'Automaton2000',
+		name = 'automaton2000',
 		packages = ['automaton2000', 'automaton2000.modules'],
 		data_files = [
 			('/etc/automaton2000', ['home/config.yml']),
