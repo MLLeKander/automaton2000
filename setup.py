@@ -6,8 +6,6 @@ setup(
 		packages = ['automaton2000', 'automaton2000.modules'],
 		data_files = [
 			('/etc/automaton2000', ['home/config.yml']),
-			('/etc/rc.d', ['home/automaton2000']),
-			('/var/run/automaton2000', [])
 			],
 		version='0.1',
 		description='A simple, modular IRC bot',
