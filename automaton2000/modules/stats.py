@@ -52,7 +52,7 @@ def handle(line, irc, match, logger):
 
          # Combat
          irc.sendchan(chan, "Attributes: %s" % (", ".join(translate_attrs(unit.attrs))))
-         if unit.race == "protoss":
+         if unit.race == "p":
             irc.sendchan(chan, ("HP: %i, %i (%i combined)" % (unit.max_hp, unit.max_shields, (unit.max_hp + unit.max_shields))))
          else:
             irc.sendchan(chan, ("HP: %i" % unit.max_hp))
