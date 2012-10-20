@@ -10,14 +10,16 @@ Just run `setup.py install` as you normally would. If you happen to be running A
 
 Modules feature a `handle()` method which is invoked with data about the text match when a trigger is found. This method should return `True` when the command was correctly handled, and `False` if it decides it didn't want to handle it after all.
 
-    def handle(line, irc, match, logger):
-		  nick,_,_,chan,msg = match
+```python
+def handle(line, irc, match, logger):
+	nick,_,_,chan,msg = match
 
-			if not msg or not msg.startswith('triggertext'):
-			  return False
+	if not msg or not msg.startswith('triggertext'):
+		return False
 
-			logger.info("Handling command request from %s." % nick)
-			irc.sendchan(chan, "Some fancy text in response to our command")
+	logger.info("Handling command request from %s." % nick)
+	irc.sendchan(chan, "Some fancy text in response to our command")
+```
 
 We get a string representing the entire IRC line, a reference to the bot that called us, a match object containing the command text, and a reference to the bot logger, a configured logging object.
 
@@ -27,11 +29,13 @@ Use the `irc.sendchan(channel, text)` method to send text back to the channel. L
 
 If you want your module to handle more than one command trigger, for example to handle a short form, or to respond to different variants of the command in different ways, something like this should work:
     
-		args = msg.split()
+```python
+args = msg.split()
 
-		keys = ['stats', 'stat', 'longstats', 'ls', 's']
-		if not args[0] in keys:
-			return False
+keys = ['stats', 'stat', 'longstats', 'ls', 's']
+if not args[0] in keys:
+	return False
+```
 
 We then find the used trigger in `args[0]` and the rest of the arguments in `args[1:]`. Parse them as you see fit.
 
