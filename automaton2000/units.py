@@ -37,9 +37,9 @@ class Attack:
 
    def __str__(self):
       if self.volleys > 1:
-         return "%s: %i x %d dmg / %.1f sec (%.1f dps)" % (self.name, self.volleys, self.dmg, self.cooldown, (self.dmg/self.cooldown))
+         return "%s: %i x %i dmg / %.1f sec (%.1f dps)" % (self.name, self.volleys, self.dmg, self.cooldown, (self.dmg/self.cooldown))
       else:
-         return "%s: %d dmg / %.1f sec (%.1f dps)" % (self.name, self.dmg, self.cooldown, (self.dmg/self.cooldown))
+         return "%s: %i dmg / %.1f sec (%.1f dps)" % (self.name, self.dmg, self.cooldown, (self.dmg/self.cooldown))
    def __repr__(self):
       return self.__str__()
 
