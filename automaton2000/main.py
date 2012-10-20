@@ -98,13 +98,13 @@ else:
 # redirect standard file descriptors
 sys.stdout.flush()
 sys.stderr.flush()
-#si = open(os.devnull, 'r')
-#so = open(os.devnull, 'a+')
-#se = open(os.devnull, 'a+')
+si = open(os.devnull, 'r')
+so = open(os.devnull, 'a+')
+se = open(os.devnull, 'a+')
 
-#os.dup2(si.fileno(), sys.stdin.fileno())
-#os.dup2(so.fileno(), sys.stdout.fileno())
-#os.dup2(se.fileno(), sys.stderr.fileno())
+os.dup2(si.fileno(), sys.stdin.fileno())
+os.dup2(so.fileno(), sys.stdout.fileno())
+os.dup2(se.fileno(), sys.stderr.fileno())
 
 
 logger.debug("Starting set up")
