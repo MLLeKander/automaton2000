@@ -42,7 +42,7 @@ def handle(line, irc, match, logger):
          if unit.gas > 0:
             costs.append("%i gas" % unit.gas)
          if unit.supply > 0:
-            costs.append("%i supply" % unit.supply)
+            costs.append("%.1f supply" % unit.supply)
          if unit.buildtime > 0:
             costs.append("%i seconds" % unit.buildtime)
 
