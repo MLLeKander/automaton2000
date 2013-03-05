@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 import signal
 import os.path
 import sys
@@ -121,16 +121,17 @@ if not args.debug:
 #}}}
 
 #{{{ PID file
-pidfilep = os.path.abspath(args.pidfile)
-try:
-   pidfile = open(pidfilep, 'x')
-except FileExistsError:
-   logger.critical("Pidfile %s already exists. Daemon already running?" % pidfilep)
-   sys.exit(1)
-else:
-   pid = str(os.getpid())
-   pidfile.write(pid)
-   pidfile.close()
+if not args.debug:
+   pidfilep = os.path.abspath(args.pidfile)
+   try:
+      pidfile = open(pidfilep, 'x')
+   except FileExistsError:
+      logger.critical("Pidfile %s already exists. Daemon already running?" % pidfilep)
+      sys.exit(1)
+   else:
+      pid = str(os.getpid())
+      pidfile.write(pid)
+      pidfile.close()
 #}}}
 
 #{{{ Set up signal handling
@@ -174,8 +175,12 @@ def run():
       bot.join()
 
 
-   os.remove(pidfilep)
+   if not args.debug:
+      os.remove(pidfilep)
    logger.info("Master thread terminating.")
+
+if __name__=="__main__":
+   run()
 #}}}
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et:fdm=marker
