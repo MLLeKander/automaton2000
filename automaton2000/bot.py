@@ -38,7 +38,10 @@ class IRCBot(threading.Thread):
       except socket.timeout:
          return None
       if data:
-         data = data.decode('utf-8')
+         try:
+             data = data.decode('utf-8')
+         except UnicodeDecodeError:
+             self.logger.debug("I didn't like that data... "+data)
          return data
       else:
          return None

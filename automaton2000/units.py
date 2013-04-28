@@ -50,7 +50,7 @@ class Unit:
                 liquipedia = '', description = '', buildtime=0, \
                 supply=1, requires=[]):
 
-      self.names = names
+      self.names = [name.lower() for name in names]
       self.name = names[0]
       self.race = race
       self.attacks = attacks
@@ -478,7 +478,7 @@ units = [
    # Terran Units
 
    Unit(
-      names=['SCV'],
+      names=['scv'],
       race='t',
       attrs='glm',
       hp=45,
@@ -486,7 +486,7 @@ units = [
          Attack('Fusion Cutter', 5, 1.5, 'g'),
       ]
    ), Unit(
-      names=['MULE'],
+      names=['mule'],
       race='t',
       attrs='glm',
       hp=60,
@@ -662,7 +662,7 @@ units = [
       armor=3,
       attacks=[
          Attack('ATS Laser Battery (v. air)', 6, 0.225, 'f'),
-         Attack('ATS Laser Battery (v. ground)', 8, 0.225, 'f'),
+         Attack('ATS Laser Battery (v. ground)', 8, 0.225, 'g'),
       ]
    ), Unit(
       names=['planetaryfortress','planetary-fortress','pf'],

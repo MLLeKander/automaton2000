@@ -11,7 +11,7 @@ servers:
    - host: irc.freenode.net
      port: 6667
      channels: ["##starcraft"]
-     nick: kaibot
+     nick: Automaton2000
      # Recognize commands prepended with this
      trigger: "!"
      # A list of modules to load for this server
