@@ -9,7 +9,7 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
-   if 'mkaito' == nick:
+   if nick in ['OMGTallMonster','mkaito']:
       logger.info("Handling module reload request from %s." % nick)
       irc.reload()
    else:
