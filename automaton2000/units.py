@@ -11,6 +11,10 @@
     s - structure '''
 import math
 
+#TODO: MS Core
+#TODO: Nexus cannon
+#TODO: Oracle
+
 
 class Attack:
    def __init__(self, name, dmg, cooldown, target_attrs, per_up=1, \
@@ -124,6 +128,15 @@ units = [
          Attack('Warp Blade', 85, 1.2, 'g'),
       ]
    ), Unit(
+      names=['nexus'],
+      race='p',
+      attrs='gas',
+      armor=1,
+      hp=1000, shields=1000,
+      attacks=[
+         Attack('Photon Overcharge', 20, 1.25, 'gf'),
+      ]
+   ), Unit(
       names=['probe'],
       race='p',
       attrs='glm',
@@ -230,13 +243,19 @@ units = [
       names=['voidray','void-ray','vr'],
       race='p',
       attrs='fam',
-      hp=100, shields=150,
+      hp=150, shields=100,
       attacks=[
-#TODO: Not sure how to handle all cases. Assume fully charged for now.
-         Attack('Prismatic Beam (v. massive armored)', 19, 0.6, 'gfav'),
-         Attack('Prismatic Beam (v. armored)', 16, 0.6, 'gfa'),
-         Attack('Prismatic Beam (v. massive)', 10, 0.6, 'gfv'),
-         Attack('Prismatic Beam', 8, 0.6, 'gf'),
+         Attack('Prismatic Beam (v. armored)', 10, 0.5, 'gfa'),
+         Attack('Prismatic Beam', 6, 0.5, 'gf'),
+      ]
+   ), Unit(
+      names=['charged-voidray','voidray-charged'],
+      race='p',
+      attrs='fam',
+      hp=150, shields=100,
+      attacks=[
+         Attack('Prismatic Beam (v. armored)', 16, 0.5, 'gfa'),
+         Attack('Prismatic Beam', 6, 0.5, 'gf'),
       ]
    ), Unit(
       names=['carrier'],
@@ -253,9 +272,18 @@ units = [
          Attack('Interceptor Beam', 5, 3, 'gf', volleys=2),
       ]
    ), Unit(
+      names=['mothershipcore','mother-ship-core','mothership-core','msc','mscore','ms-core'],
+      race='p',
+      attrs='famp',
+      hp=130, shields=60,
+      armor=1,
+      attacks=[
+         Attack('Repulsor Cannon', 8, 0.85, 'g'),
+      ]
+   ), Unit(
       names=['mothership','mother-ship','mommaship'],
       race='p',
-      attrs='famv',
+      attrs='fampv',
       hp=350, shields=350,
       armor=2,
       attacks=[
@@ -266,16 +294,22 @@ units = [
       race='p',
       attrs='famv',
       hp=300, shields=150,
-      armor=1,
+      armor=2,
       attacks=[
-         Attack('Storm Sphere (v. massive)', 50, 3.3, 'gfv'),
-         Attack('Storm Sphere', 30, 3.3, 'gfv'),
+         Attack('Kinetic Overload (v. massive)', 80, 3.3, 'fv', per_up=5),
+         Attack('Kinetic Overload', 30, 3.3, 'f', per_up=3),
+         Attack('Resonance Coil', 30, 3.3, 'g', per_up=3),
       ]
    ), Unit(
       names=['oracle'],
       race='p',
       attrs='flm',
       hp=80, shields=20,
+      attacks=[
+         #TODO: Upgrades?
+         Attack('Pulsar Beam (v. light)', 25, 0.8608, 'g'),
+         Attack('Pulsar Beam', 15, 0.8608, 'g'),
+      ]
    ), Unit(
       names=['photoncannon','photon-cannon','cannon'],
       race='p',
@@ -470,8 +504,7 @@ units = [
       attrs='glb',
       hp=65,
       attacks=[
-          # TODO: Real attack name?
-          Attack('Locust Attack', 14, 0.8608, 'g'),
+          Attack('Acid Spit', 12, 0.8608, 'g'),
       ]
    ),
 
@@ -538,11 +571,9 @@ units = [
       names=['reaper'],
       race='t',
       attrs='glb',
-      hp=50,
+      hp=60,
       attacks=[
-         Attack('D-8 Charges', 30, 1.8, 'gb'),
-         Attack('P-38 Reaper pistol (v. light)', 9, 1.1, 'gl'),
-         Attack('P-38 Reaper pistol', 4, 1.1, 'g'),
+         Attack('P-38 Reaper pistol', 4, 1.1, 'g', volleys=2),
       ]
    ), Unit(
       names=['ghost'],
@@ -570,6 +601,25 @@ units = [
       attacks=[
          Attack('Infernal Flamethrower (v. light)', 19, 2.5, 'gl'),
          Attack('Infernal Flamethrower', 8, 2.5, 'g'),
+      ]
+   ), Unit(
+      names=['hellbat'],
+      race='t',
+      attrs='glbm',
+      hp=135,
+      attacks=[
+         #TODO: Double-check +3 per upgrade vs light
+         Attack('Napalm Spray (v. light)', 30, 2, 'gl', per_up=3),
+         Attack('Napalm Spray', 18, 2, 'g', per_up=2),
+      ]
+   ), Unit(
+      names=['widowmine','widow-mine','mine'],
+      race='t',
+      attrs='glm',
+      hp=90,
+      attacks=[
+         #TODO: Doesn't take into account shield damage
+         Attack('Sentinel Missile', 125, 40, 'gf', per_up=0),
       ]
    ), Unit(
       names=['tank'],
