@@ -92,8 +92,10 @@ class IRCBot(threading.Thread):
                   self.logger.debug(self.server+" > "+line)
                   match = self.match_privmsg(line)
                   for module in self.modules:
-                     if module.handle(line, self, match, self.logger):
-                        break;
+                     try:
+                        module.handle(line, self, match, self.logger)
+                     except Exception, e:
+                        self.logger.exception(e)
       
       finally:
          self.logger.debug("Bot quitting")
