@@ -249,7 +249,7 @@ units = [
          Attack('Prismatic Beam', 6, 0.5, 'gf'),
       ]
    ), Unit(
-      names=['charged-voidray','voidray-charged'],
+      names=['charged-voidray','voidray-charged','charged-vr','vr-charged'],
       race='p',
       attrs='fam',
       hp=150, shields=100,
@@ -272,7 +272,7 @@ units = [
          Attack('Interceptor Beam', 5, 3, 'gf', volleys=2),
       ]
    ), Unit(
-      names=['mothershipcore','mother-ship-core','mothership-core','msc','mscore','ms-core'],
+           names=['mothershipcore','mother-ship-core','mothership-core','msc','mscore','ms-core','core'],
       race='p',
       attrs='famp',
       hp=130, shields=60,
@@ -400,7 +400,6 @@ units = [
       hp=90,
       attacks=[
 #TODO: Currently takes armor into account, but shouldn't.
-         Attack('Fungal Growth (v. armored)', 40, 4, 'gfa', per_up=0),
          Attack('Fungal Growth', 30, 4, 'gf', per_up=0),
       ]
    ), Unit(
@@ -458,8 +457,7 @@ units = [
       attrs='gabv',
       hp=500,
       attacks=[
-         Attack('Kaiser Blade (v. armored)', 20, 0.861, 'ga', per_up=2, splash=True),
-         Attack('Kaiser Blade', 15, 0.861, 'g', per_up=2, splash=True),
+         Attack('Kaiser Blade', 35, 0.861, 'g', per_up=3, splash=True),
       ]
    ), Unit(
       names=['spinecrawler','spine-crawler','spine'],
@@ -480,14 +478,20 @@ units = [
       armor=1,
       per_up=0,
       attacks=[
+         Attack('Seeker Spore (vs. biological)', 45, 0.8608, 'fb'),
          Attack('Seeker Spore', 15, 0.8608, 'f'),
       ]
    ), Unit(
       names=['overlord','over-lord','ol'],
       race='z',
-      attrs='gabs',
+      attrs='fab',
       hp=200,
-      per_up=0, #?
+   ), Unit(
+      names=['overseer'],
+      race='z',
+      attrs='fab',
+      hp=200,
+      armor=1,
    ), Unit(
       names=['viper'],
       race='z',
@@ -658,8 +662,15 @@ units = [
       attrs='fam',
       hp=125,
       attacks=[
-         Attack('Lanzer Torpedo (v. armored)', 14, 2, 'f', per_up=2, volleys=2),
+         Attack('Lanzer Torpedo (v. armored)', 14, 2, 'fa', per_up=2, volleys=2),
          Attack('Lanzer Torpedo', 10, 2, 'f', volleys=2),
+      ]
+   ), Unit(
+      names=['landed-viking','landedviking'],
+      race='t',
+      attrs='gam',
+      hp=125,
+      attacks=[
          Attack('Twin Gatling Cannon', 12, 1, 'g'),
       ]
    ), Unit(
