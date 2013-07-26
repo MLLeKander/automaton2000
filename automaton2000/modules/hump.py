@@ -18,7 +18,7 @@ def handle(line, irc, match, logger):
          "would rather chop his manly wire off than have intercourse with %s, to be honest."
          ]
 
-   if args[1]:
+   if len(args)>1:
       irc.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(args[1:]))
    else:
       irc.sendchan(chan, "Who would you like me to have sexy time with, %s?" % nick)
