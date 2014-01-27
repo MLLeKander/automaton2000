@@ -1,8 +1,8 @@
 # Maintainer: Michishige Kaito <me@mkaito.com>
-_pkgname=Automaton2000
+_pkgname=automaton2000
 pkgname=python-automaton2000
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple IRC bot written in Python"
 arch=(any)
 url="http://www.github.com/mkaito/automaton2000"
@@ -11,13 +11,14 @@ depends=('python' 'python-yaml' 'python-distribute')
 provides=('automaton2000')
 backup=('etc/automaton2000/config.yml')
 install='automaton2000.install'
-source=('automaton2000-0.1.tar.gz', 'automaton2000')
-md5sums=()
+source=('automaton2000-0.1.tar.gz' 'rc.d-automaton2000')
+#md5sums=('7dfbed17f13e25433af06a8b1f14863c' '087b148d607e770ca8370ae15a8eb82d')
 
 package() {
   cd "$srcdir/$_pkgname-$pkgver"
   python3 setup.py install --root="$pkgdir/" --optimize=1
-  install automaton2000 /etc/rc.d
+  cd ..
+  install -T rc.d-automaton2000 -D $pkgdir/etc/rc.d/automaton2000
 }
 
 # vim:set ts=2 sw=2 et:

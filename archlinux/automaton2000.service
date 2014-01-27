@@ -1,0 +1,11 @@
+[Unit]
+Description=Automaton2000 IRC Bot
+After=network.target
+
+[Service]
+User=automaton2000
+Type=forking
+PIDFile=/run/automaton2000/automaton2000.pid
+ExecStart=/usr/bin/automaton2000 --pidfile /run/automaton2000/automaton2000.pid
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+Restart=always
