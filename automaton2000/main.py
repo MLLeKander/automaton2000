@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 import signal
 import os.path
 import sys
@@ -136,12 +136,11 @@ if not args.debug:
 
 #{{{ Set up signal handling
 logger.debug("Wiring up signals")
-def handleUSR1(sig, fram):
+def handleUSR1(sig, frame):
    logger.info("Reloading all bot code!")
    for bot in bots:
       if bot.isAlive():
          bot.stop()
-         bot.join()
 
    logger.debug("Bots deactivated. Restarting main thread.")
    os.remove(pidfilep)
@@ -153,10 +152,11 @@ signal.signal(signal.SIGUSR1, handleUSR1)
 
 def handleINT(sig, frame):
    for bot in bots:
-      bot.stop()
+      if bot.isAlive():
+         bot.stop()
 
 signal.signal(signal.SIGINT, handleINT)
-signal.signal(signal.SIGTERM, handleINT)
+signal.signal(signal.SIGQUIT, handleINT)
 #}}}
 
 #{{{ Main entry point
@@ -172,7 +172,8 @@ def run():
 
    logger.info("Botnet up and running")
    for bot in bots:
-      bot.join()
+      while bot.isAlive():
+         bot.join(timeout=0.1)
 
 
    if not args.debug:

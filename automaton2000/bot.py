@@ -67,40 +67,42 @@ class IRCBot(threading.Thread):
    def reload(self):
       self.logger.info("Reloading all modules")
       [reload(m) for m in self.modules]
-      #TODO: Reload module config
+      #TODO: Spawn new bot and kill self
    
    
    def run(self):
-      self._con = socket.socket()
-      self._con.connect((self.server, self.port))
-      self._con.settimeout(1)
-      self.send('USER %s %s %s %s' % (self.nick, self.nick, self.nick, self.nick))
-      self.send('NICK %s' % (self.nick))
-      for channel in self.channels:
-         self.send('JOIN %s' % (channel))
+      while not self.terminate.isSet():
+         self.logger.debug("Connecting to %s:%i" % (self.server, self.port))
+         self._con = socket.socket()
+         self._con.connect((self.server, self.port))
+         self._con.settimeout(1)
+         self.send('USER %s %s %s %s' % (self.nick, self.nick, self.nick, self.nick))
+         self.send('NICK %s' % (self.nick))
+         for channel in self.channels:
+            self.send('JOIN %s' % (channel))
       
-      try:
-         while not self.terminate.isSet():
-            data = self.receive()
-            if not data:
-               time.sleep(0.5)
-               continue
-            else:
-               lines = data.split('\r\n')
-               for line in lines:
-                  if line.strip() == '': continue
-                  self.logger.debug(self.server+" > "+line)
-                  match = self.match_privmsg(line)
-                  for module in self.modules:
-                     try:
-                        module.handle(line, self, match, self.logger)
-                     except Exception, e:
-                        self.logger.exception(e)
-      
-      finally:
-         self.logger.debug("Bot quitting")
-         self.send('QUIT :Automaton destroyed')
-         self._con.close()
-         self.logger.info("Socked closed. Thread terminating immediately.")
+         try:
+            while not self.terminate.isSet():
+               data = self.receive()
+               if not data:
+                  time.sleep(0.5)
+                  continue
+               else:
+                  lines = data.split('\r\n')
+                  for line in lines:
+                     if line.strip() == '': continue
+                     self.logger.debug(self.server+" > "+line)
+                     match = self.match_privmsg(line)
+                     for module in self.modules:
+                        try:
+                           module.handle(line, self, match, self.logger)
+                        except Exception, e:
+                           self.logger.exception(e)
+         
+         finally:
+            self.logger.debug("Bot quitting")
+            self.send('QUIT :Automaton destroyed')
+            self._con.close()
+            self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et
