@@ -11,13 +11,13 @@ def upgrade_to_str(armor, shield=0):
    return s+" "
    
 
-def handle(line, irc, match, logger):
+def handle(line, bot, match):
    nick,_,_,chan,msg = match
    
    if not msg or not msg.startswith('htk'):
       return False
 
-   logger.info("Handling htk request from %s: %s" % (nick, msg))
+   bot.logger.info("Handling htk request from %s: %s" % (nick, msg))
    
    args = msg.split()
    
@@ -77,7 +77,7 @@ def handle(line, irc, match, logger):
    except IndexError:
       output = nick+': Not enough arguments.'
    
-   irc.sendchan(chan, output)
+   bot.sendchan(chan, output)
    return True
 
 # vim:ts=3:sts=3:sw=3:tw=80:sta:et

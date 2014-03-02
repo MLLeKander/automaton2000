@@ -95,7 +95,7 @@ class IRCBot(threading.Thread):
                      match = self.match_privmsg(line)
                      for module in self.modules:
                         try:
-                           module.handle(line, self, match, self.logger)
+                           module.handle(line, self, match)
                         except Exception, e:
                            self.logger.exception(e)
          

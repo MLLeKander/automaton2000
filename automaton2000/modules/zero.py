@@ -1,4 +1,4 @@
-def handle(line, irc, match, logger):
+def handle(line, bot, match):
    nick,_,_,chan,msg = match
    if not msg:
       return False
@@ -9,7 +9,7 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
-   irc.sendchan(chan, "Dividing by zero, buckle up...")
+   bot.sendchan(chan, "Dividing by zero, buckle up...")
    
    1/0
    return True

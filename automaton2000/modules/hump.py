@@ -1,6 +1,6 @@
 from random import choice
 
-def handle(line, irc, match, logger):
+def handle(line, bot, match):
    nick,_,_,chan,msg = match
    if not msg:
       return False
@@ -11,7 +11,7 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
-   logger.info("Handling hump request: %s" % msg)
+   bot.logger.info("Handling hump request: %s" % msg)
 
    sexual_options = [
          "has crazy ass, electric intercourse that is forbidden in 7 states with %s.",
@@ -19,9 +19,9 @@ def handle(line, irc, match, logger):
          ]
 
    if len(args)>1:
-      irc.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(args[1:]))
+      bot.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(args[1:]))
    else:
-      irc.sendchan(chan, "Who would you like me to have sexy time with, %s?" % nick)
+      bot.sendchan(chan, "Who would you like me to have sexy time with, %s?" % nick)
 
    return True
 

@@ -1,5 +1,5 @@
-def handle(line, con, match, logger):
-   if not line.startswith('PING'):
-      return False
-   con.send('PONG '+line[5:]+'\n')
-   return True
+def handle(line, bot, match):
+    if not line.startswith('PING'):
+        return False
+    bot.send('PONG '+line[5:]+'\n')
+    return True

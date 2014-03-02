@@ -1,7 +1,7 @@
 # vim: set fileencoding=utf-8:
 from automaton2000 import units
 
-def handle(line, irc, match, logger):
+def handle(line, bot, match):
    nick,_,_,chan,msg = match
    if not msg:
       return False
@@ -12,28 +12,28 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
-   logger.info("Handling stats request for %s: %s" % (nick, msg))
+   bot.logger.info("Handling stats request for %s: %s" % (nick, msg))
 
    try:
       unit = units.get_unit(args[1])
-      logger.info("User %s requested stats for %s" % (nick, args[1]))
+      bot.logger.info("User %s requested stats for %s" % (nick, args[1]))
    except IndexError:
-      irc.sendchan(chan, "Please provide a unit name")
+      bot.sendchan(chan, "Please provide a unit name")
       return True
 
    if not unit:
-      irc.sendchan(chan, "not found")
-      #irc.sendchan(chan, "%s: Unknown entity: %s" % (nick, args[1]))
+      bot.sendchan(chan, "not found")
+      #bot.sendchan(chan, "%s: Unknown entity: %s" % (nick, args[1]))
       return True
 
    else:
-      logger.info("User %s requested stats for %s" % (nick, unit.name))
+      bot.logger.info("User %s requested stats for %s" % (nick, unit.name))
       if args[0] in ['longstats', 'ls']:
          # Description
-         irc.sendchan(chan, unit.description)
+         bot.sendchan(chan, unit.description)
 
          # Race
-         irc.sendchan(chan, "Race: %s" % translate_race(unit.race))
+         bot.sendchan(chan, "Race: %s" % translate_race(unit.race))
           
          # Cost (minerals, gas, supply, build time)
          costs = []
@@ -48,23 +48,23 @@ def handle(line, irc, match, logger):
 
          if len(costs) > 0:
             output = "Costs: " + (", ".join(costs)) + "."
-            irc.sendchan(chan, output)
+            bot.sendchan(chan, output)
 
          # Combat
-         irc.sendchan(chan, "Attributes: %s" % (", ".join(translate_attrs(unit.attrs))))
+         bot.sendchan(chan, "Attributes: %s" % (", ".join(translate_attrs(unit.attrs))))
          if unit.race == "p":
-            irc.sendchan(chan, ("HP: %i, %i (%i combined)" % (unit.max_hp, unit.max_shields, (unit.max_hp + unit.max_shields))))
+            bot.sendchan(chan, ("HP: %i, %i (%i combined)" % (unit.max_hp, unit.max_shields, (unit.max_hp + unit.max_shields))))
          else:
-            irc.sendchan(chan, ("HP: %i" % unit.max_hp))
+            bot.sendchan(chan, ("HP: %i" % unit.max_hp))
          
          if unit.attacks:
-            irc.sendchan(chan, "Attacks: ")
+            bot.sendchan(chan, "Attacks: ")
             for a in unit.attacks:
-               irc.sendchan(chan, ("   %s" % a))
+               bot.sendchan(chan, ("   %s" % a))
          
          # Liquipedia
          if unit.liquipedia:
-            irc.sendchan(chan, "Find out more in Liquipedia: %s" % unit.liquipedia)
+            bot.sendchan(chan, "Find out more in Liquipedia: %s" % unit.liquipedia)
 
       else:
          output = ''
@@ -76,7 +76,7 @@ def handle(line, irc, match, logger):
             if unit.description:
                output =+ ' — '
             output += liquipedia
-         irc.sendchan(chan, output)
+         bot.sendchan(chan, output)
       
       return True
 

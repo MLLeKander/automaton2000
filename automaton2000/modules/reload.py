@@ -1,4 +1,4 @@
-def handle(line, irc, match, logger):
+def handle(line, bot, match):
    nick,_,_,chan,msg = match
    if not msg:
       return False
@@ -9,11 +9,11 @@ def handle(line, irc, match, logger):
    if not args[0] in keys:
       return False
 
-   if nick in ['OMGTallMonster','mkaito']:
-      logger.info("Handling module reload request from %s." % nick)
-      irc.reload()
+   if nick in ['OMGTallMonster','mkaito', "tuxdev"]:
+      bot.logger.info("Handling module reload request from %s." % nick)
+      bot.reload()
    else:
-      logger.info("Denying module reload request from %s" % nick)
+      bot.logger.info("Denying module reload request from %s" % nick)
 
    return True
 
