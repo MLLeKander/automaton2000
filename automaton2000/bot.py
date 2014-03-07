@@ -7,7 +7,7 @@ import threading
 import logging
 import automaton2000.modules
 
-regex = ':(?P<nick>[^ ]*)!~(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
+regex = ':(?P<nick>[^ ]*)!(?P<user>[^ ]*)@(?P<host>[^ ]*) ' + \
 'PRIVMSG (?P<chan>[^ ]*) :{0}(?P<msg>.*)'
 
 re_notrig = re.compile(regex.format(''))
