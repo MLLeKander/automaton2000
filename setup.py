@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from setuptools import setup
 
 setup(
@@ -10,7 +10,7 @@ setup(
 		version='0.1',
 		description='A simple, modular IRC bot',
 		author='##starcraft@Freenode',
-		install_requires=['pyyaml', 'distribute'],
+		install_requires=['PyYAML>=3.10'],
 		zip_safe = True,
 		entry_points = {
 				'console_scripts': [

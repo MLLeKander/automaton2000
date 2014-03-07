@@ -10,8 +10,8 @@ group: automaton2000
 servers:
    - host: irc.freenode.net
      port: 6667
-     channels: ["##starcraft"]
-     nick: Automaton2000
+     channels: ["##automaton2000dev"]
+     nick: AutomatonDevelop
      # Recognize commands prepended with this
      trigger: "!"
      # A list of modules to load for this server

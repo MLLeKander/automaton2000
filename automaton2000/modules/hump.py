@@ -19,10 +19,16 @@ def handle(line, bot, match):
          ]
 
    if len(args)>1:
-      bot.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(args[1:]))
+      if args[1] == "me":
+         n = [nick]
+      elif args[1] in ["you", "yourself"]:
+         n = ["himself"]
+      else:
+         n = args[1:]
+
+      bot.sendchan(chan, ("\x01ACTION " + choice(sexual_options) + "\x01") % " ".join(n))
+
    else:
       bot.sendchan(chan, "Who would you like me to have sexy time with, %s?" % nick)
 
    return True
-
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et
