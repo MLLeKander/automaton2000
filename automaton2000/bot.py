@@ -68,12 +68,11 @@ class IRCBot(threading.Thread):
                if line.strip() == '': continue
                self.logger.debug(self.server+" > "+line)
                match = self.match_privmsg(line)
-               if match:
-                  for module in self.modules:
-                     try:
-                        module.handle(line, self, match)
-                     except Exception, e:
-                        self.logger.exception(e)
+               for module in self.modules:
+                  try:
+                     module.handle(line, self, match)
+                  except Exception, e:
+                     self.logger.exception(e)
    
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
