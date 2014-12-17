@@ -19,16 +19,17 @@ class IRCBot(threading.Thread):
       self.port = port
       self.channels = channels
       self.nick = nick
+      self.logger = logging.getLogger("automaton2000")
+      self.logger.debug("%s: Loading modules." % self.server)
       self.modules = [importlib.import_module("automaton2000.modules.%s" % m) for m in mods]
       #self.trigger = trigger
-      self.logger = logging.getLogger("automaton2000")
       self.re_trig = re.compile(regex.format(re.escape(trigger)))
       self.terminate = threading.Event()
 
    def run(self):
       # Errant connection issues? Just reconnect!
       while not self.terminate.is_set():
-         self.logger.debug("Connecting to %s:%i" % (self.server, self.port))
+         self.logger.info("Connecting to %s:%i" % (self.server, self.port))
          self._con = socket.socket()
          self._con.connect((self.server, self.port))
          self._con.settimeout(0.5)
@@ -39,10 +40,9 @@ class IRCBot(threading.Thread):
 
          try:
             self.receive()
-            self.logger.debug("%s: receive() returned." % self.server)
 
          finally:
-            self.logger.debug("Bot quitting")
+            self.logger.debug("%s: Shutting down" % self.server)
             self.send('QUIT :Automaton destroyed')
             self._con.close()
             self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
@@ -60,7 +60,7 @@ class IRCBot(threading.Thread):
                line = line.decode('utf-8')
 
             except UnicodeDecodeError:
-               self.logger.debug("Line contained invalid unicode, ignoring: %s" % line)
+               self.logger.debug("%s: Line contained invalid unicode, ignoring: %s" % (self.server, line))
                continue
 
             self.logger.debug(self.server+" > "+line)
@@ -76,7 +76,15 @@ class IRCBot(threading.Thread):
          # No data left in buffer, poll socket for more
          else:
             try:
-               buffer += self._con.recv(4096)
+               r = self._con.recv(4096)
+
+               # Check to see if the socket is still alive
+               if r == 0:
+                  self.logger.debug("%s: Socket was closed externally." % self.server)
+                  break
+               else:
+                  buffer += r
+
             except socket.timeout:
                pass
 
