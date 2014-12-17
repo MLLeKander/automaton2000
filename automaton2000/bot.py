@@ -27,7 +27,7 @@ class IRCBot(threading.Thread):
 
    def run(self):
       # Errant connection issues? Just reconnect!
-      while not self.terminate.isSet():
+      while not self.terminate.is_set():
          self.logger.debug("Connecting to %s:%i" % (self.server, self.port))
          self._con = socket.socket()
          self._con.connect((self.server, self.port))
@@ -38,8 +38,8 @@ class IRCBot(threading.Thread):
             self.send('JOIN %s' % (channel))
 
          try:
-            while not self.terminate.isSet():
-               self.receive()
+            self.receive()
+            self.logger.debug("%s: receive() returned." % self.server)
 
          finally:
             self.logger.debug("Bot quitting")
@@ -48,31 +48,45 @@ class IRCBot(threading.Thread):
             self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
 
    def receive(self):
-      while not self.terminate.isSet():
+      while not self.terminate.is_set():
+         # FIXME: If we get a partial line at the end of the stream, it might get corrupted.
+         #        Solution: Read into a buffer and pop lines off the top to process.
+         #        Need to find out how to "consume" lines off the front of a string.
          try:
             data = self._con.recv(1024)
+
          except socket.timeout:
-            return None
-         if not data:
+            # no data, just try again later
             time.sleep(0.5)
             continue
-         else:
-            try:
-               data = data.decode('utf-8')
-            except UnicodeDecodeError:
-               self.logger.debug("I didn't like that data... "+data)
+
+         try:
+            # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
+            data = data.decode('utf-8')
+
+         except UnicodeDecodeError:
+            self.logger.debug("Dropping invalid unicode: %s" % data)
+            continue
+
+         except AttributeError:
+            self.logger.debug("Got invalid data patch: %s" % data)
+            continue
+
+         lines = data.split('\r\n')
+
+         for line in lines:
+            if line.strip() == '':
                continue
 
-            lines = data.split('\r\n')
-            for line in lines:
-               if line.strip() == '': continue
-               self.logger.debug(self.server+" > "+line)
-               match = self.match_privmsg(line)
-               for module in self.modules:
-                  try:
-                     module.handle(line, self, match)
-                  except Exception, e:
-                     self.logger.exception(e)
+            self.logger.debug(self.server+" > "+line)
+            match = self.match_privmsg(line)
+
+            for module in self.modules:
+               try:
+                  module.handle(line, self, match)
+
+               except Exception, e:
+                  self.logger.exception(e)
 
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
