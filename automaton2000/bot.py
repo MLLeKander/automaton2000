@@ -31,7 +31,8 @@ class IRCBot(threading.Thread):
          self.logger.debug("Connecting to %s:%i" % (self.server, self.port))
          self._con = socket.socket()
          self._con.connect((self.server, self.port))
-         self._con.settimeout(1)
+         # Arbitrary time between socket polls and line processings
+         self._con.settimeout(0.05)
          self.send('USER %s %s %s %s' % (self.nick, self.nick, self.nick, self.nick))
          self.send('NICK %s' % (self.nick))
          for channel in self.channels:
@@ -48,45 +49,38 @@ class IRCBot(threading.Thread):
             self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
 
    def receive(self):
+      buffer = ""
+
       while not self.terminate.is_set():
-         # FIXME: If we get a partial line at the end of the stream, it might get corrupted.
-         #        Solution: Read into a buffer and pop lines off the top to process.
-         #        Need to find out how to "consume" lines off the front of a string.
          try:
-            data = self._con.recv(1024)
+            buffer += self._con.recv(4096)
 
          except socket.timeout:
-            # no data, just try again later
-            time.sleep(0.5)
-            continue
+            # No data left in the socket, that's fine.
+            pass
 
-         try:
-            # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
-            data = data.decode('utf-8')
+         if "\r\n" in buffer:
+            try:
+               # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
+               (line, buffer) = buffer.split("\r\n", 1)
+               line = line.decode('utf-8')
 
-         except UnicodeDecodeError:
-            self.logger.debug("Dropping invalid unicode: %s" % data)
-            continue
-
-         except AttributeError:
-            self.logger.debug("Got invalid data patch: %s" % data)
-            continue
-
-         lines = data.split('\r\n')
-
-         for line in lines:
-            if line.strip() == '':
+            except UnicodeDecodeError:
+               self.logger.debug("Line contained invalid unicode, ignoring: %s" % line)
                continue
 
-            self.logger.debug(self.server+" > "+line)
-            match = self.match_privmsg(line)
+         else:
+            continue
 
-            for module in self.modules:
-               try:
-                  module.handle(line, self, match)
+         self.logger.debug(self.server+" > "+line)
+         match = self.match_privmsg(line)
 
-               except Exception, e:
-                  self.logger.exception(e)
+         for module in self.modules:
+            try:
+               module.handle(line, self, match)
+
+            except Exception, e:
+               self.logger.exception(e)
 
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
