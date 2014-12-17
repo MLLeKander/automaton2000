@@ -1,8 +1,8 @@
 def handle(line, bot, match):
-   nick,_,_,chan,msg = match
-   if not msg:
+   if not match:
       return False
 
+   nick,_,_,chan,msg = match
    args = msg.split()
 
    keys = ['zero']
@@ -10,7 +10,7 @@ def handle(line, bot, match):
       return False
 
    bot.sendchan(chan, "Dividing by zero, buckle up...")
-   
+
    1/0
    return True
 

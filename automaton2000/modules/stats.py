@@ -2,10 +2,10 @@
 from automaton2000 import units
 
 def handle(line, bot, match):
-   nick,_,_,chan,msg = match
-   if not msg:
+   if not match:
       return False
 
+   nick,_,_,chan,msg = match
    args = msg.split()
 
    keys = ['stats', 'stat', 'longstats', 'ls', 's']
@@ -34,7 +34,7 @@ def handle(line, bot, match):
 
          # Race
          bot.sendchan(chan, "Race: %s" % translate_race(unit.race))
-          
+
          # Cost (minerals, gas, supply, build time)
          costs = []
          if unit.minerals > 0:
@@ -56,12 +56,12 @@ def handle(line, bot, match):
             bot.sendchan(chan, ("HP: %i, %i (%i combined)" % (unit.max_hp, unit.max_shields, (unit.max_hp + unit.max_shields))))
          else:
             bot.sendchan(chan, ("HP: %i" % unit.max_hp))
-         
+
          if unit.attacks:
             bot.sendchan(chan, "Attacks: ")
             for a in unit.attacks:
                bot.sendchan(chan, ("   %s" % a))
-         
+
          # Liquipedia
          if unit.liquipedia:
             bot.sendchan(chan, "Find out more in Liquipedia: %s" % unit.liquipedia)
@@ -77,7 +77,7 @@ def handle(line, bot, match):
                output =+ ' — '
             output += liquipedia
          bot.sendchan(chan, output)
-      
+
       return True
 
 def translate_attrs(attrs):

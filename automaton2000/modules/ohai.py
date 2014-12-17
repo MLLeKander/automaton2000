@@ -1,6 +1,9 @@
 import random
 
 def handle(line, bot, match):
+   if not match:
+      return False
+
    responses = [
       'The fuck do you want... sir?',
       '{0}, you are such a noobcock!',

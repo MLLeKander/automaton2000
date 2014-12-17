@@ -68,20 +68,20 @@ bots = [IRCBot(s['host'], s['port'], s['channels'], s['nick'], s['modules'], s['
 
 #{{{ Daemonization
 if not args.debug:
-   try: 
-      pid = os.fork() 
+   try:
+      pid = os.fork()
       if pid > 0:
          # exit first parent
          logger.debug('fork #1 worked!\n')
-         sys.exit(0) 
+         sys.exit(0)
 
-   except OSError as err: 
+   except OSError as err:
       logger.debug('fork #1 failed: {0}\n'.format(err))
       sys.exit(1)
 
    # decouple from parent environment
-   os.setsid() 
-   os.umask(0) 
+   os.setsid()
+   os.umask(0)
 
    if os.getuid() == 0 and config['user']:
       # Get uid and gid for the given names.
@@ -95,18 +95,18 @@ if not args.debug:
       # Set gid first. After dropping root as uid, we can't change groups any more.
       os.setgid(gid)
       os.setuid(uid)
-   os.chdir('/') 
+   os.chdir('/')
 
    # do second fork
-   try: 
-      pid = os.fork() 
+   try:
+      pid = os.fork()
       if pid > 0:
          # exit from second parent
          logger.debug('fork #2 worked!\n')
-         sys.exit(0) 
-   except OSError as err: 
+         sys.exit(0)
+   except OSError as err:
       logger.debug('fork #2 failed: {0}\n'.format(err))
-      sys.exit(1) 
+      sys.exit(1)
 
    # redirect standard file descriptors
    sys.stdout.flush()
