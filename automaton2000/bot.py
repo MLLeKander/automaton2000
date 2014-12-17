@@ -31,8 +31,7 @@ class IRCBot(threading.Thread):
          self.logger.debug("Connecting to %s:%i" % (self.server, self.port))
          self._con = socket.socket()
          self._con.connect((self.server, self.port))
-         # Arbitrary time between socket polls and line processings
-         self._con.settimeout(0.05)
+         self._con.settimeout(0.5)
          self.send('USER %s %s %s %s' % (self.nick, self.nick, self.nick, self.nick))
          self.send('NICK %s' % (self.nick))
          for channel in self.channels:
@@ -52,13 +51,8 @@ class IRCBot(threading.Thread):
       buffer = ""
 
       while not self.terminate.is_set():
-         try:
-            buffer += self._con.recv(4096)
 
-         except socket.timeout:
-            # No data left in the socket, that's fine.
-            pass
-
+         # Exhaust buffer before polling for more data
          if "\r\n" in buffer:
             try:
                # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
@@ -69,18 +63,22 @@ class IRCBot(threading.Thread):
                self.logger.debug("Line contained invalid unicode, ignoring: %s" % line)
                continue
 
+            self.logger.debug(self.server+" > "+line)
+
+            # Pass the line around to our modules
+            match = self.match_privmsg(line)
+            for module in self.modules:
+               try:
+                  module.handle(line, self, match)
+               except Exception, e:
+                  self.logger.exception(e)
+
+         # No data left in buffer, poll socket for more
          else:
-            continue
-
-         self.logger.debug(self.server+" > "+line)
-         match = self.match_privmsg(line)
-
-         for module in self.modules:
             try:
-               module.handle(line, self, match)
-
-            except Exception, e:
-               self.logger.exception(e)
+               buffer += self._con.recv(4096)
+            except socket.timeout:
+               pass
 
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
