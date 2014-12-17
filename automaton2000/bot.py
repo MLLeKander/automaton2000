@@ -24,7 +24,7 @@ class IRCBot(threading.Thread):
       self.logger = logging.getLogger("automaton2000")
       self.re_trig = re.compile(regex.format(re.escape(trigger)))
       self.terminate = threading.Event()
-   
+
    def run(self):
       # Errant connection issues? Just reconnect!
       while not self.terminate.isSet():
@@ -36,7 +36,7 @@ class IRCBot(threading.Thread):
          self.send('NICK %s' % (self.nick))
          for channel in self.channels:
             self.send('JOIN %s' % (channel))
-      
+
          try:
             while not self.terminate.isSet():
                self.receive()
@@ -46,7 +46,7 @@ class IRCBot(threading.Thread):
             self.send('QUIT :Automaton destroyed')
             self._con.close()
             self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
-   
+
    def receive(self):
       while not self.terminate.isSet():
          try:
@@ -73,21 +73,21 @@ class IRCBot(threading.Thread):
                      module.handle(line, self, match)
                   except Exception, e:
                      self.logger.exception(e)
-   
+
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
       match = re.match(line)
       if not match:
          return None
       return [match.group(key) for key in ['nick','user','host','chan','msg']]
-   
+
    def send(self, line):
       self.logger.debug(self.server+' < '+line.rstrip())
       self._con.send(bytes((line+'\r\n').encode('utf-8')))
 
    def sendchan(self, chan, line):
       self.send("PRIVMSG %s :%s\r\n" % (chan,line))
-   
+
    def stop(self):
       self.logger.debug("Thread was requested to stop.")
       self.terminate.set()
