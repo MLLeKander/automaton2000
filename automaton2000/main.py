@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 #{{{ Logger
 logger = logging.getLogger("automaton2000")
-formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 if not args.debug:
    slh = SysLogHandler('/dev/log', "daemon")
    slh.setFormatter(formatter)
