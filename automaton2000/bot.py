@@ -53,7 +53,7 @@ class IRCBot(threading.Thread):
       while not self.terminate.is_set():
 
          # Exhaust buffer before polling for more data
-         if "\r\n" in buffer:
+         while "\r\n" in buffer:
             try:
                # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
                (line, buffer) = buffer.split("\r\n", 1)
@@ -74,19 +74,18 @@ class IRCBot(threading.Thread):
                   self.logger.exception(e)
 
          # No data left in buffer, poll socket for more
-         else:
-            try:
-               r = self._con.recv(4096)
+         try:
+            r = self._con.recv(4096)
 
-               # Check to see if the socket is still alive
-               if r == 0:
-                  self.logger.debug("%s: Socket was closed externally." % self.server)
-                  break
-               else:
-                  buffer += r
+            # Check to see if the socket is still alive
+            if r == 0:
+               self.logger.debug("%s: Socket was closed externally." % self.server)
+               break
+            else:
+               buffer += r
 
-            except socket.timeout:
-               pass
+         except socket.timeout:
+            pass
 
    def match_privmsg(self, line, usetrigger=True):
       re = self.re_trig if usetrigger else re_notrig
