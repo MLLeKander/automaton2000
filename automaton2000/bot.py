@@ -1,6 +1,7 @@
+# -*- mode: python; -*-
 import re
 import importlib
-from imp import reload
+import imp
 import socket
 import time
 import threading
@@ -48,16 +49,15 @@ class IRCBot(threading.Thread):
             self.logger.info("Socket closed for %s:%i." % (self.server, self.port))
 
    def receive(self):
-      buffer = ""
+      buffer = b""
 
       while not self.terminate.is_set():
 
          # Exhaust buffer before polling for more data
-         while "\r\n" in buffer:
+         while b"\r\n" in buffer:
             try:
-               # FIXME: I'd much rather just filter out any invalid bytes and try to make sense of the rest.
-               (line, buffer) = buffer.split("\r\n", 1)
-               line = line.decode('utf-8')
+               (line, _, buffer) = buffer.partition(b"\r\n")
+               line = line.decode(errors="ignore")
 
             except UnicodeDecodeError:
                self.logger.debug("%s: Line contained invalid unicode, ignoring: %s" % (self.server, line))
@@ -70,7 +70,7 @@ class IRCBot(threading.Thread):
             for module in self.modules:
                try:
                   module.handle(line, self, match)
-               except Exception, e:
+               except Exception as e:
                   self.logger.exception(e)
 
          # No data left in buffer, poll socket for more
@@ -95,11 +95,12 @@ class IRCBot(threading.Thread):
       return [match.group(key) for key in ['nick','user','host','chan','msg']]
 
    def send(self, line):
-      self.logger.debug(self.server+' < '+line.rstrip())
-      self._con.send(bytes((line+'\r\n').encode('utf-8')))
+      line = line.rstrip()
+      self.logger.debug("%s < %s" % (self.server, line))
+      self._con.send(("%s\r\n" % line).encode('utf-8'))
 
    def sendchan(self, chan, line):
-      self.send("PRIVMSG %s :%s\r\n" % (chan,line))
+      self.send("PRIVMSG %s :%s" % (chan,line))
 
    def stop(self):
       self.logger.debug("Thread was requested to stop.")
@@ -107,4 +108,4 @@ class IRCBot(threading.Thread):
 
    def reload(self):
       self.logger.info("Reloading all modules")
-      [reload(m) for m in self.modules]
+      [imp.reload(m) for m in self.modules]

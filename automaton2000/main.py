@@ -162,8 +162,8 @@ signal.signal(signal.SIGQUIT, handleINT)
 #{{{ Main entry point
 def run():
    logger.debug("Main entry point called")
-   # And here's the main meat
 
+   # And here's the main meat
    logger.debug("Set up complete. Starting botnet")
    for bot in bots:
       bot.daemon = True
