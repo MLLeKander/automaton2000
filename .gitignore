@@ -33,3 +33,5 @@ pip-log.txt
 
 # Our log file
 home/automaton2000.log
+.#*
+*.bak
