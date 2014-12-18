@@ -1,0 +1,35 @@
+-*- mode: org -*-
+
+* Useful links:
+[[https://github.com/OMGTallMonster/automaton2000/issues][Issues on Github]]
+
+* Road plan
+The plan is to first port the code to Python 3.4.2, and start writing
+unit tests.
+
+Once the core has decent coverage, I want to start working
+on a better module architecture. OMGTallMonster mentioned turning each
+module into an actor and communicating over queues. This inherently
+means turning modules into classes, which is needed either way.
+
+The next step is permanent storage. The API still needs to be
+designed, but we'll cross that bridge when we get there.
+
+Once we have a storage API and a sane module API, we can start
+implementing more interesting modules.
+
+A few that have been mentioned:
+
+- A help module that allows modules to self-document, and users to
+  query this documentation.
+- A URL shortener.
+- A fuck9gag module that detects links to 9gag and replaces them by
+  fuck9gag links.
+- Triggered text storage, that allows storage and retrieval by keyword
+  in IRC.
+- Authorization, so the bot can handle non-public operations.
+
+* Python 3
+Read [[http://python-notes.curiousefficiency.org/en/latest/python3/questions_and_answers.html][this]] for notes on why we would want to move to Python 3. tl;dr:
+Python 3 is all about getting unicode right, and barring specific
+reasons, I think we should move ahead.
