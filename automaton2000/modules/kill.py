@@ -15,4 +15,3 @@ def handle(line, bot, match):
    else:
       bot.sendchan(chan, "Who do you think you are, telling me what to do!?")
 
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et

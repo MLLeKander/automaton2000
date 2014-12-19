@@ -772,4 +772,3 @@ def htk(attacker, defender, atk_up=0, armor_up=0, shield_up=0):
    
    return -1
 
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et

@@ -80,4 +80,3 @@ def handle(line, bot, match):
    bot.sendchan(chan, output)
    return True
 
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et

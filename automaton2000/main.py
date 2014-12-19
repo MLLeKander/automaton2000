@@ -184,4 +184,3 @@ if __name__=="__main__":
    run()
 #}}}
 
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et:fdm=marker

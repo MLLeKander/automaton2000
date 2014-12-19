@@ -1,4 +1,3 @@
-# vim: set fileencoding=utf-8:
 from automaton2000 import units
 
 def handle(line, bot, match):
@@ -104,4 +103,3 @@ def translate_race(race):
 
    return translations.get(race)
 
-# vim:ts=3:sts=3:sw=3:tw=80:sta:et
