@@ -10,11 +10,10 @@ group: automaton2000
 servers:
    - host: irc.freenode.net
      port: 6667
-     channels: ["##starcraft"]
+     channels: ["##automatondev-i5LnO"]
      nick: AutomatonDev
      # Recognize commands prepended with this
      trigger: "!"
      # A list of modules to load for this server
      modules: [ohai, htk, stats, ping, kill, hump, reload, zero]
 
-# vim:ts=2:sts=2:sw=3:tw=80:sta:et

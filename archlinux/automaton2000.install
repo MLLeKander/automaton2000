@@ -5,5 +5,3 @@ post_install() {
 post_remove() {
 	userdel automaton2000
 }
-
-# vim:set ts=2 sw=2 et:

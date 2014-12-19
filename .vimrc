@@ -1,1 +1,1 @@
-au BufRead,BufNewFile *.py setl ts=3 sts=3 sw=3 tw=80 sta et
+au BufRead,BufNewFile *.py setl ts=2 sts=2 sw=2 noet

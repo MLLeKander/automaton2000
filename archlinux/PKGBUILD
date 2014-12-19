@@ -20,5 +20,3 @@ package() {
   cd ..
   install -T rc.d-automaton2000 -D $pkgdir/etc/rc.d/automaton2000
 }
-
-# vim:set ts=2 sw=2 et:
